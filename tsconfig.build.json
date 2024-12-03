@@ -1,0 +1,14 @@
+{
+    "files": [],
+    "references": [
+        {
+            "path": "packages/common"
+        },
+        {
+            "path": "packages/server"
+        },
+        {
+            "path": "packages/client"
+        }
+    ]
+}

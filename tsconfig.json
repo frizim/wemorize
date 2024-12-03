@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+      "target": "ES2018",
+      "strict": true,
+      "incremental": true,
+      "sourceMap": true,
+      "composite": true,
+      "useDefineForClassFields": true,
+      "allowJs": false,
+      "allowSyntheticDefaultImports": true,
+      "forceConsistentCasingInFileNames": true,
+      "module": "Node16",
+      "moduleResolution": "node16",
+      "resolveJsonModule": true,
+      "isolatedModules": true,
+      "noEmit": true,
+      "declaration": true,
+      "skipLibCheck": true,
+      "esModuleInterop": true ,
+      "declarationMap": true,
+      "allowImportingTsExtensions": true,
+      "baseUrl": ".",
+      "rootDir": "src",
+      "outDir": "target",
+      "typeRoots": [
+        "node_modules/@types"
+      ],
+      "paths": {
+        
+      }
+    }
+}

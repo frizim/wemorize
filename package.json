@@ -1,0 +1,29 @@
+{
+  "name": "wemorize",
+  "version": "0.1.0",
+  "description": "A web-based online platform allowing users to learn anything with community-created flashcard sets",
+  "scripts": {
+    "build": "tsc --build -v tsconfig.build.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "typescript",
+    "learning",
+    "education",
+    "flashcards",
+    "social media",
+    "community",
+    "webapp"
+  ],
+  "workspaces": [
+    "packages/common",
+    "packages/server",
+    "packages/client"
+  ],
+  "repository": "https://github.com/frizim/wemorize",
+  "author": "Friedrich Zimniak",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.7.2"
+  }
+}
