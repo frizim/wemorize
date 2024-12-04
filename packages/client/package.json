@@ -4,11 +4,19 @@
   "description": "Wemorize web frontend",
   "main": "src/index.ts",
   "scripts": {
+    "css-lint": "stylelint scss/",
+    "css-prefix": "postcss --replace target/css/* --use autoprefixer --no-map",
+    "css": "sass --style compressed --no-error-css --no-source-map --load-path=../node_modules scss:target/css && npm run css-prefix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Friedrich Zimniak",
   "license": "MIT",
   "dependencies": {
     "@wemorize/common": "^0.1.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "postcss-cli": "^11.0.0"
   }
 }
