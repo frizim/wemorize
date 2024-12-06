@@ -1,12 +1,28 @@
 import { Schema } from "./schema";
 
+type ListenConfig = {
+    host: string,
+    port: number
+}
+
+type DatabaseConfig = {
+    db: string,
+    host: string,
+    database: string,
+    username: string,
+    password?: string
+}
+
 export class Config {
 
-    readonly listen: any;
-    readonly baseUrl: string | undefined;
-    readonly instanceName: string | undefined;
+    readonly listen: ListenConfig = {
+        host: "localhost",
+        port: 80
+    };
+    readonly baseUrl: string = "localhost";
+    readonly instanceName: string = "Wemorize";
     readonly enableRegistration: boolean = false;
-    readonly db: any;
+    readonly storage: DatabaseConfig | undefined;
 }
 
 export class ConfigSchema extends Schema<Config> {
@@ -14,7 +30,7 @@ export class ConfigSchema extends Schema<Config> {
     constructor() {
         super({
             type: "object",
-            required: ["listen", "baseUrl", "instanceName", "enableRegistration", "db"],
+            required: ["listen", "baseUrl", "instanceName", "enableRegistration", "storage"],
             properties: {
                 listen: {
                     type: "object",
@@ -37,11 +53,11 @@ export class ConfigSchema extends Schema<Config> {
                 enableRegistration: {
                     type: "boolean"
                 },
-                db: {
+                storage: {
                     type: "object",
-                    required: ["engine", "host", "database", "username"],
+                    required: ["provider", "host", "database", "username"],
                     properties: {
-                        engine: {
+                        provider: {
                             type: "string"
                         },
                         host: {
