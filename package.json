@@ -4,7 +4,8 @@
   "description": "A web-based online platform allowing users to learn anything with community-created flashcard sets",
   "scripts": {
     "build": "tsc --build -v tsconfig.build.json",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-server": "npm run build && npm run -w @wemorize/server start"
   },
   "keywords": [
     "typescript",
@@ -24,6 +25,10 @@
   "author": "Friedrich Zimniak",
   "license": "MIT",
   "devDependencies": {
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "@types/node": "^22.10.1"
+  },
+  "dependencies": {
+
   }
 }
