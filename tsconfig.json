@@ -22,12 +22,10 @@
       "composite": true,
       "useDefineForClassFields": true,
       "resolveJsonModule": true,
-      "noEmit": true,
       "declaration": true,
       "skipLibCheck": true,
       "esModuleInterop": true,
       "declarationMap": true,
-      "allowImportingTsExtensions": true,
 
       "baseUrl": ".",
       "rootDir": "src",
