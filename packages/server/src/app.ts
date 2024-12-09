@@ -10,6 +10,8 @@ import { VerifyController } from "./controller/user/verify";
 import { fastify, FastifyInstance } from "fastify";
 import formbody from "@fastify/formbody";
 import { serialize } from "cookie";
+import fastifyView from "@fastify/view";
+import Handlebars from "handlebars";
 
 export class WemorizeApplication {
 
@@ -70,6 +72,7 @@ export class WemorizeApplication {
         });
 
         app.session();
+        app.view();
         app.routes();
 
         return app;
@@ -82,6 +85,37 @@ export class WemorizeApplication {
                 process.exit(1);
             }
         });
+    }
+
+    private view() {
+        this.server.register(fastifyView, {
+            engine: {
+                handlebars: Handlebars
+            },
+            root: "./src/view",
+            includeViewExtension: true,
+            viewExt: "tpl",
+            defaultContext: {
+                instanceName: this.config.instanceName,
+                baseUrl: this.config.baseUrl,
+                logoFilename: "logo.svg"
+            },
+            options: {
+                partials: {
+                    base: "base.tpl"
+                },
+                compileOptions: {
+                    strict: true
+                }
+            }
+        });
+
+        this.server.decorateReply("showMessage", function(route: string, messageId: string) {
+            this.header("set-cookie", serialize("msg-" + route, messageId, {
+                httpOnly: true,
+                sameSite: "strict"
+            }));
+        });    
     }
 
     private routes() {
