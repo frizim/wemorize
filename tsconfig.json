@@ -28,8 +28,6 @@
       "declarationMap": true,
 
       "baseUrl": ".",
-      "rootDir": "src",
-      "outDir": "target",
       "typeRoots": [
         "node_modules/@types"
       ],
