@@ -2,10 +2,15 @@ import postgres, { Row, Sql } from "postgres";
 import { Config } from "../../schema/config";
 import { StorageProvider } from "../provider";
 import fs from "node:fs";
+import { AuthTokenRepository, SessionRepository, UserRepository } from "../users";
+import { PgAuthTokenRepository, PgSessionRepository, PgUserRepository } from "./pg_users";
 
 export class PgStorageProvider implements StorageProvider {
 
     private pool?: Sql;
+    private userRepo?: UserRepository;
+    private sessionRepo?: SessionRepository;
+    private authTokenRepo?: AuthTokenRepository;
 
     private static readonly LATEST_VER = 1;
 
@@ -17,6 +22,10 @@ export class PgStorageProvider implements StorageProvider {
                 undefined: null
             }
         });
+
+        this.userRepo = new PgUserRepository(this.pool);
+        this.sessionRepo = new PgSessionRepository(this.pool);
+        this.authTokenRepo = new PgAuthTokenRepository(this.pool);
     }
 
     async shutdown(): Promise<void> {
@@ -60,6 +69,18 @@ export class PgStorageProvider implements StorageProvider {
                 console.error("No migration file found for " + ver);
             }
         }
+    }
+
+    getUserRepository(): UserRepository {
+        return this.userRepo as UserRepository;
+    }
+
+    getSessionRepository(): SessionRepository {
+        return this.sessionRepo as SessionRepository;
+    }
+
+    getAuthTokenRepository(): AuthTokenRepository {
+        return this.authTokenRepo as AuthTokenRepository;
     }
     
 }
