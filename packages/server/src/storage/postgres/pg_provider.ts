@@ -3,6 +3,10 @@ import { StorageProvider } from "../provider";
 import fs from "node:fs";
 import { AuthTokenRepository, SessionRepository, UserRepository } from "../users";
 import { AuthTokenTable, PgAuthTokenRepository, PgSessionRepository, PgUserRepository, SessionTable, UserTable } from "./pg_users";
+import { CourseEnrollmentRepository } from "../course_users";
+import { CourseEnrollmentTable, EnrollmentCardStatsTable, EnrollmentDailyStatsTable, PgCourseEnrollmentRepository } from "./pg_course_users";
+import { CourseLanguageRepository } from "../courses";
+import { CardTable, CourseLanguageTable, CourseTable, PgCourseLanguageRepository } from "./pg_courses";
 import { Pool } from "pg";
 import { Kysely, PostgresDialect } from "kysely";
 import { Logger } from "../../util/logger";
@@ -11,6 +15,14 @@ export interface WemorizeDatabase {
     users: UserTable,
     sessions: SessionTable,
     auth_tokens: AuthTokenTable,
+
+    courses: CourseTable,
+    course_languages: CourseLanguageTable,
+    cards: CardTable,
+
+    course_enrollments: CourseEnrollmentTable,
+    enrollment_daily_stats: EnrollmentDailyStatsTable,
+    enrollment_card_stats: EnrollmentCardStatsTable
 }
 
 export class PgStorageProvider implements StorageProvider {
@@ -20,6 +32,9 @@ export class PgStorageProvider implements StorageProvider {
     private userRepo?: UserRepository;
     private sessionRepo?: SessionRepository;
     private authTokenRepo?: AuthTokenRepository;
+
+    private courseLanguageRepo?: CourseLanguageRepository;
+    private courseEnrollmentRepo?: CourseEnrollmentRepository;
 
     private static readonly LATEST_VER = 3;
 
@@ -38,6 +53,9 @@ export class PgStorageProvider implements StorageProvider {
         this.userRepo = new PgUserRepository(this.db);
         this.sessionRepo = new PgSessionRepository(this.db);
         this.authTokenRepo = new PgAuthTokenRepository(this.db);
+
+        this.courseLanguageRepo = new PgCourseLanguageRepository(this.db);
+        this.courseEnrollmentRepo = new PgCourseEnrollmentRepository(this.db);
     }
 
     async shutdown(): Promise<void> {
@@ -96,6 +114,14 @@ export class PgStorageProvider implements StorageProvider {
 
     getAuthTokenRepository(): AuthTokenRepository {
         return this.authTokenRepo!;
+    }
+
+    getCourseLanguageRepository(): CourseLanguageRepository {
+        return this.courseLanguageRepo!;
+    }
+
+    getCourseEnrollmentRepository(): CourseEnrollmentRepository {
+        return this.courseEnrollmentRepo!;
     }
     
 }
