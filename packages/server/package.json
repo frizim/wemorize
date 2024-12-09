@@ -21,6 +21,12 @@
     "fastify": "^5.1.0",
     "handlebars": "^4.7.8",
     "i18next": "^24.0.5",
-    "postgres": "^3.4.5"
+    "pg": "^8.13.1",
+    "kysely": "^0.27.5",
+    "nodemailer": "^6.9.16"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^6.4.17",
+    "@types/pg": "^8.11.10"
   }
 }

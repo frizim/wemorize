@@ -1,185 +1,208 @@
-import postgres from "postgres";
-import { User } from "../../model/user";
+import { Role, State, User } from "../../model/user";
 import { AuthTokenRepository, SessionRepository, UserRepository } from "../users";
 import { DataNotFoundError } from "../repository";
 import { Session } from "../../model/session";
-import { AuthToken } from "../../model/auth_token";
+import { AuthToken, AuthTokenType } from "../../model/auth_token";
+import {Generated, GeneratedAlways, Kysely, sql} from "kysely";
+import { WemorizeDatabase } from "./pg_provider";
+
+export interface UserTable {
+    id: GeneratedAlways<number>;
+    name: string,
+    email: string,
+    new_email: string|null,
+    password_hash: string,
+    last_login: Date|null,
+    registered: Generated<Date>,
+    role: Generated<Role>,
+    state: Generated<State>,
+    avatar_id: string|null
+};
+
+export interface SessionTable {
+    token_hash: Uint8Array,
+    user_id: number|null,
+    expires: Date,
+    fingerprint: Uint8Array,
+    request_token: string
+};
+
+export interface AuthTokenTable {
+    token_hash: Uint8Array,
+    user_id: number,
+    type: AuthTokenType,
+    expires: Date
+};
 
 class PgUserRepository implements UserRepository {
 
-    private readonly pool: postgres.Sql;
+    private readonly db: Kysely<WemorizeDatabase>;
 
-    constructor(pool: postgres.Sql) {
-        this.pool = pool;
+    constructor(db: Kysely<WemorizeDatabase>) {
+        this.db = db;
     }
 
     async getById(id: number): Promise<User> {
-        return this.pool<User[]>`SELECT id,name,email,new_email,password_hash,last_login,registered,role,state FROM users WHERE id = ${id}`
-        .then(result => {
-            if(result.length == 0) {
-                return Promise.reject(new DataNotFoundError("user"));
-            }
-
-            return result[0];
-        }, err => {
-            return Promise.reject(new Error(err));
-        }) as Promise<User>;
+        return await this.db.selectFrom("users")
+            .selectAll()
+            .where("id", "=", id)
+            .executeTakeFirstOrThrow(() => new DataNotFoundError("user"));
     }
 
     async getByEmail(email: string): Promise<User> {
-        return this.pool<User[]>`SELECT id,name,email,new_email,password_hash,last_login,registered,role,state FROM users WHERE email = ${email}`
-        .then(result => {
-            if(result.length == 0) {
-                return Promise.reject(new DataNotFoundError("user"));
-            }
-
-            return result[0];
-        }, err => {
-            return Promise.reject(new Error(err));
-        }) as Promise<User>;
+        return await this.db.selectFrom("users")
+            .selectAll()
+            .where("email", "=", email)
+            .executeTakeFirstOrThrow(() => new DataNotFoundError("user"));
     }
 
     async create(item: User): Promise<number> {
-        return this.pool`INSERT INTO users(name, email, password_hash, role, state)
-            VALUES(${item.name}, ${item.email}, ${item.password_hash}, ${item.role}, ${item.state}) RETURNING id`
-            .then(result => {
-                return result[0];
-            }) as Promise<number>;
+        return (await this.db.insertInto("users")
+            .values({
+                name: item.name,
+                email: item.email,
+                password_hash: item.password_hash,
+                state: item.state
+            })
+            .returning("id")
+            .executeTakeFirstOrThrow(() => new DataNotFoundError("user"))).id;
     }
 
     async update(item: User): Promise<boolean> {
-        return this.pool`UPDATE users SET ${this.pool(item)} WHERE id = ${item.id}`
-        .then(result => {
-            return Promise.resolve(result.count > 0);
-        });
+        return ((await this.db.updateTable("users")
+            .set(item)
+            .where("id", "=", item.id)
+            .execute())[0]?.numChangedRows ?? 0) > 0;
     }
 
     async delete(id: number): Promise<boolean> {
-        return this.pool`DELETE FROM users WHERE id=${id}`
-        .then(result => {
-            return Promise.resolve(result.count > 0);
-        });
+        return ((await this.db.deleteFrom("users")
+            .where("id", "=", id)
+            .execute())[0]?.numDeletedRows ?? 0) > 0;
     }
     
 }
 
 class PgSessionRepository implements SessionRepository {
 
-    private readonly pool: postgres.Sql;
+    private readonly db: Kysely<WemorizeDatabase>;
 
-    constructor(pool: postgres.Sql) {
-        this.pool = pool;
+    constructor(db: Kysely<WemorizeDatabase>) {
+        this.db = db;
     }
 
     async getById(id: Uint8Array): Promise<Session> {
-        return this.pool`SELECT user_id,name,email,new_email,password_hash,last_login,registered,role,state,
-        token_hash, expires, fingerprint, request_token FROM sessions LEFT JOIN users ON sessions.user_id = users.id
-        WHERE token_hash = ${id} AND expires > ${Date.now()}`
-            .then(rows => {
-                const row = rows.length > 0 ? rows[0] : null;
-                if(!row) {
-                    return Promise.reject(new DataNotFoundError("session"));
-                }
+        const row = await this.db.selectFrom("sessions")
+            .leftJoin("users", "sessions.user_id", "users.id")
+            .selectAll()
+            .where("token_hash", "=", id)
+            .where("expires", ">", sql<Date>`(CURRENT_TIMESTAMP AT TIME ZONE 'utc')`)
+            .executeTakeFirstOrThrow(() => new DataNotFoundError("session"));
 
-                let user: User|null = null;
-                if(row.user_id) {
-                    user = {
-                        id: row.user_id,
-                        name: row.name,
-                        email: row.email,
-                        password_hash: row.password_hash,
-                        registered: row.registered,
-                        role: row.role,
-                        state: row.state
-                    };
-                }
-                
-                return {
-                    user: user,
-                    tokenHash: row.token_hash,
-                    expires: row.expires,
-                    fingerprint: row.fingerprint,
-                    request_token: row.request_token
-                } as Session;
-            }, (err: Error) => {
-                return Promise.reject(err);
-            });
+        let user: User|null = null;
+        if(row.user_id) {
+            user = {
+                id: row.user_id,
+                name: row.name!,
+                email: row.email!,
+                password_hash: row.password_hash!,
+                registered: row.registered!,
+                role: row.role!,
+                state: row.state!,
+                avatar_id: row.avatar_id
+            };
+        }
+
+        return new Session(
+            user,
+            row.token_hash,
+            row.expires,
+            row.fingerprint,
+            row.request_token
+        );
     }
 
     async create(item: Session): Promise<Uint8Array> {
-        return this.pool`INSERT INTO sessions(token_hash, user_id, expires, fingerprint, request_token) VALUES(${item.tokenHash}, ${item.user ? item.user.id : null}, ${item.expires}, ${item.fingerprint}, ${item.request_token})`
-            .then(res => {
-                if(res.count > 0) {
-                    return item.tokenHash;
-                }
-                return Promise.reject(new Error("No session created"));
-            });
+        return ((
+            await this.db.insertInto("sessions")
+                .values({
+                    token_hash: item.token_hash,
+                    user_id: item.user?.id,
+                    expires: item.expires,
+                    fingerprint: item.fingerprint,
+                    request_token: item.request_token
+                })
+                .execute()
+        )[0]?.numInsertedOrUpdatedRows ?? 0) > 0 ? item.token_hash : Promise.reject(new Error("No session created"));
     }
 
     async delete(id: Uint8Array): Promise<boolean> {
-        return this.pool`DELETE FROM sessions WHERE token_hash=${id}`
-        .then(res => {
-            return res.count > 0;
-        });
+        return (
+            (await this.db.deleteFrom("sessions")
+                .where("token_hash", "=", id)
+                .execute())[0]?.numDeletedRows ?? 0
+        ) > 0;
     }
     
 }
 
 class PgAuthTokenRepository implements AuthTokenRepository {
 
-    private readonly pool: postgres.Sql;
+    private readonly db: Kysely<WemorizeDatabase>;
 
-    constructor(pool: postgres.Sql) {
-        this.pool = pool;
+    constructor(db: Kysely<WemorizeDatabase>) {
+        this.db = db;
     }
 
     async getById(id: Uint8Array): Promise<AuthToken> {
-        return this.pool`SELECT user_id,name,email,new_email,password_hash,last_login,registered,role,state,
-            type,expires FROM auth_tokens
-            JOIN users ON users.id = auth_tokens.user_id
-            WHERE token = ${id} AND expires > ${Date.now()}`
-            .then(rows => {
-                const row = rows.length > 0 ? rows[0] : null;
-                if(!row) {
-                    return Promise.reject(new DataNotFoundError("auth token"));
-                }
+        const row = await this.db.selectFrom("auth_tokens")
+            .innerJoin("users", "auth_tokens.user_id", "users.id")
+            .selectAll()
+            .where("token_hash", "=", id)
+            .executeTakeFirst();
 
-                const user: User = {
-                    id: row.user_id,
-                    name: row.name,
-                    email: row.email,
-                    new_email: row.new_email,
-                    password_hash: row.password_hash,
-                    last_login: row.last_login,
-                    registered: row.registered,
-                    role: row.role,
-                    state: row.state
-                };
+        if(!row) {
+            return Promise.reject(new DataNotFoundError("auth_token"));
+        }
 
-                const token: AuthToken = {
-                    user: user,
-                    expires: row.expires,
-                    type: row.type,
-                    token_hash: id
-                };
+        const user: User = {
+            id: row.user_id,
+            name: row.name,
+            email: row.email,
+            new_email: row.new_email,
+            password_hash: row.password_hash,
+            last_login: row.last_login,
+            registered: row.registered,
+            role: row.role,
+            state: row.state,
+            avatar_id: row.avatar_id
+        };
 
-                return token;
-            });
+        const token: AuthToken = {
+            user: user,
+            expires: row.expires,
+            type: row.type,
+            token_hash: id
+        };
+
+        return token;
     }
 
     async create(item: AuthToken): Promise<Uint8Array> {
-        return this.pool`INSERT INTO auth_tokens(token_hash,user_id,type,expires)
-            VALUES(${item.token_hash},${item.user.id}, ${item.type}, ${item.expires})`
-        .then(res => {
-            return Promise.resolve(item.token_hash);
-        });
+        return ((await this.db.insertInto("auth_tokens")
+            .values({
+                token_hash: item.token_hash,
+                user_id: item.user.id,
+                type: item.type,
+                expires: item.expires
+            })
+            .execute())[0]?.numInsertedOrUpdatedRows ?? 0) > 0 ? item.token_hash : Promise.reject(new Error("Could not create auth token"));
     }
 
     async delete(id: Uint8Array): Promise<boolean> {
-        return this.pool`DELETE FROM auth_tokens WHERE token_hash=${id}`
-        .then(res => {
-            return Promise.resolve(res.count > 0);
-        });
+        return ((await this.db.deleteFrom("auth_tokens")
+            .where("token_hash", "=", id)
+            .execute())[0]?.numDeletedRows ?? 0) > 0;
     }
     
 }

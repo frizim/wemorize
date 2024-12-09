@@ -19,12 +19,14 @@ export interface User extends Profile {
     readonly id: number;
     name: string;
     email: string;
-    new_email?: string;
+    new_email?: string|null;
     password_hash: string;
-    readonly last_login?: EpochTimeStamp;
-    readonly registered: EpochTimeStamp;
+    readonly last_login?: Date|null;
+    readonly registered: Date;
     role: Role;
     state: State;
+    avatar_id?: string|null;
+
 }
 
 export {

@@ -1,4 +1,5 @@
 export interface Profile {
     id: number,
-    name: string
+    name: string,
+    avatar_id?: string|null
 }
