@@ -1,28 +1,32 @@
-export class User {
+import { Profile } from "@wemorize/common/src/model/profile";
+
+enum Role {
+    user = "user",
+    contributor = "contributor",
+    moderator = "moderator",
+    admin = "admin"
+}
+
+enum State {
+    active = "active",
+    unverified = "unverified",
+    blocked = "blocked",
+    deletion_pending = "deletion_pending"
+}
+
+export interface User extends Profile {
+
     readonly id: number;
-    #name: string;
-    #email: string;
-    
+    name: string;
+    email: string;
+    new_email?: string;
+    password_hash: string;
+    readonly last_login?: EpochTimeStamp;
+    readonly registered: EpochTimeStamp;
+    role: Role;
+    state: State;
+}
 
-    constructor(name: string, email: string = '', id: number = -1) {
-        this.id = id;
-        this.#name = name;
-        this.#email = email;
-    }
-
-    public getId(): number {
-        return this.id;
-    }
-
-    public getName(): string {
-        return this.#name;
-    }
-
-    public getEmail(): string {
-        return this.#email;
-    }
-
-    public hasEmail(): boolean {
-        return this.#email != '';
-    }
+export {
+    Role, State
 }
