@@ -1,11 +1,11 @@
 import Ajv, { ValidateFunction } from 'ajv';
 
 export abstract class Schema<T extends object> {
-    readonly jsonSchema: ValidateFunction<T>;
+    readonly jsonSchema: ValidateFunction;
     static readonly ajv = new Ajv();
 
     constructor(jsonSchema: object) {
-        this.jsonSchema = Schema.ajv.compile<T>(jsonSchema);
+        this.jsonSchema = Schema.ajv.compile(jsonSchema);
     }
 
     abstract makeObject(): T;
@@ -18,6 +18,6 @@ export abstract class Schema<T extends object> {
     }
 
     fromString(input: string): T | boolean {
-        return this.get(JSON.parse(input));
+        return this.get(JSON.parse(input) as object);
     }
 }

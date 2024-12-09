@@ -1,16 +1,27 @@
 import { Schema } from "./schema";
 
-type ListenConfig = {
+interface ListenConfig {
     host: string,
     port: number
 }
 
-type DatabaseConfig = {
+interface DatabaseConfig {
     db: string,
     host: string,
     database: string,
     username: string,
     password?: string
+}
+
+interface SmtpConfig {
+    sender: string,
+    host: string,
+    port: number,
+    secure: boolean,
+    auth: {
+        user: string,
+        pass: string
+    }
 }
 
 export class Config {
@@ -23,6 +34,7 @@ export class Config {
     readonly instanceName: string = "Wemorize";
     readonly enableRegistration: boolean = false;
     readonly storage: DatabaseConfig | undefined;
+    readonly smtp: SmtpConfig | undefined;
 }
 
 export class ConfigSchema extends Schema<Config> {
@@ -30,7 +42,7 @@ export class ConfigSchema extends Schema<Config> {
     constructor() {
         super({
             type: "object",
-            required: ["listen", "baseUrl", "instanceName", "enableRegistration", "storage"],
+            required: ["listen", "baseUrl", "instanceName", "enableRegistration", "storage", "smtp"],
             properties: {
                 listen: {
                     type: "object",
@@ -71,6 +83,51 @@ export class ConfigSchema extends Schema<Config> {
                         },
                         password: {
                             type: "string"
+                        }
+                    }
+                },
+                cookie: {
+                    type: "object",
+                    required: ["secure", "domain", "path"],
+                    properties: {
+                        secure: {
+                            type: "boolean"
+                        },
+                        domain: {
+                            type: "string"
+                        },
+                        path: {
+                            type: "string"
+                        }
+                    }
+                },
+                smtp: {
+                    type: "object",
+                    required: ["sender", "host", "port", "secure", "auth"],
+                    properties: {
+                        sender: {
+                            type: "string"
+                        },
+                        host: {
+                            type: "string"
+                        },
+                        port: {
+                            type: "number"
+                        },
+                        secure: {
+                            type: "boolean"
+                        },
+                        auth: {
+                            type: "object",
+                            required: ["user", "pass"],
+                            properties: {
+                                user: {
+                                    type: "string"
+                                },
+                                pass: {
+                                    type: "string"
+                                }
+                            }
                         }
                     }
                 }
