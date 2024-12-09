@@ -36,6 +36,7 @@ export default [
           "allowNumber": true
         }
       ],
+      "@typescript-eslint/no-misused-promises": "off",
       "@typescript-eslint/no-this-alias": "off",
       "@typescript-eslint/no-non-null-assertion": "off",
       "@typescript-eslint/no-invalid-void-type": [
