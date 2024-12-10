@@ -2,7 +2,6 @@
 {{#*inline "content"}}
 <form method="post" action="{{baseUrl}}/forgot-password">
     <h1 class="title">{{i18n "forgotPassword.title"}}</h1>
-    {{#if message}}<div class="alert al-error"><div class="message-body">{{i18n message}}</div></div>{{/if}}
 
     <div class="field border label">
         <input name="email" type="email" maxlength="320" required="required">

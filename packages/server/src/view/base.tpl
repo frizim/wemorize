@@ -4,11 +4,12 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="referrer" content="no-referrer">
+        <meta http-equiv="content-security-policy" content="default-src: 'none'; script-src: 'self'; style-src: 'self'; img-src: 'self'; font-src: 'self'; form-action: 'self'; connect-src: 'self'; frame-ancestors: 'none'; upgrade-insecure-requests">
         <meta name="color-scheme" content="light dark">
         <meta name="creator" content="Wemorize">
 
         <title>{{ title }} - {{instanceName}}</title>
-        <link rel="icon" href="{{baseUrl}}/img/logo.svg">
+        <link rel="icon" href="{{baseUrl}}/img/favicon.svg">
         <link rel="stylesheet" href="{{baseUrl}}/css/base.css">
         <script src="{{baseUrl}}/js/base.js" defer="defer"></script>
         {{#> inHeader}}
@@ -23,22 +24,21 @@
                 </a>
                 <div class="max"></div>
                 {{#if user}}
-                <button class="transparent nav-overlay active" id="show-search"><i>search</i></button>
-                <div class="nav-overlay max" id="course-search-bar">
-                    <form class="field fill">
-                        {{reqTokenField reqToken}}
-                        <input id="course-search" name="prefix" class="search-input" type="search" minlength="2" maxlength="200" required="required"
+                <form id="course-search-form">
+                    {{reqTokenField reqToken}}
+                    <div id="course-search-bar" class="field fill suffix">
+                        <input id="course-search" name="prefix" class="nav-overlay search-input" type="search" minlength="2" maxlength="200" required="required"
                             hx-validate="true"
                             hx-post="/courses/search"
                             hx-trigger="input changed delay:400ms, click from:#show-search"
                             hx-target="#search-overlay"
                             hx-swap="outerHTML">
-                    </form>
-                    <button class="transparent" id="hide-search"><i>close</i></button>
-                </div>
+                        <a href="" class="button transparent circle" id="toggle-search"><i class="nav-overlay active">search</i><i class="nav-overlay">close</i></a>
+                    </div>
+                </form>
                 <span id="profile">
                     <button class="button transparent">
-                        <span><img src="{{baseUrl}}/{{avatarImg}}" alt=""> {{user.name}}</span>
+                        <span><img class="avatar circle" src="{{baseUrl}}/{{avatarImg}}" alt=""><span class="m l"> {{user.name}}</span></span>
                         <i>arrow_drop_down</i>
                     </button>
                     <menu>
@@ -71,10 +71,11 @@
                 {{/if}}
             </nav>
         </header>
-        {{#if user}} <div id="search-overlay"></div> {{/if}}
+        {{#if user}} <div id="search-overlay" class="nav-overlay"></div> {{/if}}
         <main class="responsive">
             {{#> content}}
             {{/content}}
+            <div id="error-message" class="snackbar error{{#if message}} active{{/if}}"><p class="max">{{#if message}}{{i18n message}}{{/if}}</p><label class="on-error" for="error-message__close"><input type="radio" id="error-message__close"><i>close</i></label></div>
         </main>
         <footer>
             <nav class="content" aria-label="{{i18n "aria.footerMenu"}}">

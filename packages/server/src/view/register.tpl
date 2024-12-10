@@ -3,8 +3,6 @@
 <form method="post" action="{{baseUrl}}/register">
     <h1>{{i18n "register.title"}}</h1>
     
-    {{#if message}}<div class="alert al-error">{{i18n message}}</div>{{/if}}
-    
     <div class="field border label">
         <input name="username" id="username" type="text" maxlength="200" required="required" placeholder=" ">
         <label for="username">{{i18n "fields.username"}}</label>
@@ -35,7 +33,7 @@
     </label>
 
     {{reqTokenField reqToken}}
-    <button type="submit" class="button primary">{{i18n "buttons.register"}}</button>
+    <button type="submit" class="button primary small-elevate">{{i18n "buttons.register"}}</button>
 </form>
 {{/inline}}
 {{/base}}
