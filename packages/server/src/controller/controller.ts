@@ -6,6 +6,7 @@ import { SessionRepository } from "../storage/users";
 import { StorageProvider } from "../storage/provider";
 import { FastifyRequest, FastifyReply, FastifyInstance, RouteHandlerMethod } from "fastify";
 import { ControllerConfiguration } from "./decorators";
+import { Config } from "../schema/config";
 
 declare module "fastify" {
     export interface FastifyRequest {
@@ -13,6 +14,7 @@ declare module "fastify" {
     }
 
     export interface FastifyInstance {
+        config: Config,
         db: StorageProvider
     }
 

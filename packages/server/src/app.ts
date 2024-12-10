@@ -22,6 +22,10 @@ import i18next from "i18next";
 import { createTransport } from "nodemailer";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { SettingsController } from "./controller/user/settings";
+import fastifyMultipart from "@fastify/multipart";
+import { DeleteController } from "./controller/user/delete";
+import { AvatarController } from "./controller/user/avatar";
 
 export class WemorizeApplication {
 
@@ -36,6 +40,15 @@ export class WemorizeApplication {
     }
 
     public static async create(cfg: Config): Promise<WemorizeApplication> {
+        fs.stat(cfg.dataDir).catch(async (err: unknown) => {
+            await fs.mkdir(cfg.dataDir);
+        });
+
+        const avatarDir = path.join(cfg.dataDir, "avatars");
+        fs.stat(avatarDir).catch(async (err: unknown) => {
+            await fs.mkdir(avatarDir);
+        });
+
         const server = await fastify({
             logger: {
                 level: "debug"
@@ -44,6 +57,13 @@ export class WemorizeApplication {
 
         server.decorate("config", cfg);
         server.register(formbody);
+        server.register(fastifyMultipart, {
+            attachFieldsToBody: 'keyValues',
+            limits: {
+                files: 1,
+                fileSize: 10 * 1024 * 1024
+            }
+        });
 
         const db = new PgStorageProvider();
         db.init(cfg);
@@ -140,12 +160,14 @@ export class WemorizeApplication {
     private async i18n() {
         await i18next.init({
             lng: "de",
+            defaultNS: "default",
             resources: {}
         });
 
         const files = await fs.readdir("./src/view/i18n");
         for(const file of files) {
-            i18next.addResourceBundle(file.replace(".json", ""), "", JSON.parse((await fs.readFile("./src/view/i18n/" + file)).toString()));
+            this.server.log.info("Adding language file %s", file);
+            i18next.addResourceBundle(file.replace(".json", ""), "default", JSON.parse((await fs.readFile("./src/view/i18n/" + file)).toString()) as object, true);
         }
     
         Handlebars.registerHelper("i18n", (key: string, args: {hash: Record<string, string>}) => {
@@ -169,6 +191,8 @@ export class WemorizeApplication {
             let status = 500;
     
             if(err.code === "FST_ERR_VALIDATION") {
+                req.log.debug("Error validation schema: %o", err);
+
                 if(req.method === "get") {
                     errTemplate = "badRequest";
                     status = 400;
@@ -202,6 +226,15 @@ export class WemorizeApplication {
             index: false,
             list: false
         });
+
+        this.server.register(fastifyStatic, {
+            root: path.join(this.config.dataDir, "avatars"),
+            prefix: "/avatar",
+            wildcard: true,
+            index: false,
+            list: false,
+            decorateReply: false
+        });
     }
 
     private mail() {
@@ -223,8 +256,12 @@ export class WemorizeApplication {
         new LoginController().register(this.server);
         new LogoutController().register(this.server);
         new VerifyController().register(this.server);
+
         new ForgotPasswordController().register(this.server);
         new ResetPasswordController().register(this.server);
+        new SettingsController().register(this.server);
+        new AvatarController().register(this.server);
+        new DeleteController().register(this.server);
 
         new Dashboard().register(this.server);
         new SearchCoursesController().register(this.server);

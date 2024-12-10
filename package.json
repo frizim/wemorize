@@ -4,9 +4,8 @@
   "description": "A web-based online platform allowing users to learn anything with community-created flashcard sets",
   "scripts": {
     "build": "tsc --build -v tsconfig.build.json",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start-server": "npm run build && npm run -w @wemorize/server start",
-    "watch-server": "nodemon -e ts,tpl,js --spawn --watch ./packages/server/src --watch ./packages/common/src -x npm run start-server"
+    "watch-server": "npm -w @wemorize/server run watch",
+    "watch-client": "npm -w @wemorize/client run watch"
   },
   "keywords": [
     "typescript",

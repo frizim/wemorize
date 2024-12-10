@@ -1,0 +1,9 @@
+input[name="toggle-delete"] {
+    display: none;
+}
+
+#show-delete:checked + dialog {
+    opacity:1;
+    transform:translate(0px);
+    visibility:visible;
+}

@@ -121,6 +121,7 @@ export class AuthenticationDecorator extends ControllerConfigurationDecorator {
                     return;
                 }
 
+                req.log.warn("Unauthorized access to route %s by user %o", req.url, req.session.user);
                 resp.status(401);
             }
             else {
@@ -146,9 +147,9 @@ export class GuardNonAuthenticatedDecorator extends ControllerConfigurationDecor
     
 }
 
-export class IpRateLimitDecorator extends ControllerConfigurationDecorator {
+abstract class RateLimitDecorator<T> extends ControllerConfigurationDecorator {
 
-    private readonly ratelimStats: Map<string, {start: EpochTimeStamp, count: number}>;
+    private readonly ratelimStats: Map<T, {start: EpochTimeStamp, count: number}>;
     private readonly maxRate: number;
     private readonly maxAge: number;
 
@@ -159,30 +160,47 @@ export class IpRateLimitDecorator extends ControllerConfigurationDecorator {
         this.maxAge = maxAge;
     }
 
+    protected checkRateLimit(key: T, req: FastifyRequest, resp: FastifyReply): boolean {
+        const stats = this.ratelimStats.get(key);
+        if(stats) {
+            if(Date.now() - stats.start < this.maxAge) {
+                if(stats.count >= this.maxRate) {
+                    req.log.warn("Rate limit exceeded for %s on route %s", key, req.url);
+                    resp.status(429);
+                    return false;
+                }
+                else {
+                    stats.count++;
+                    return true;
+                }
+            }
+        }
+
+        if(this.ratelimStats.size >= 100000) {
+            const oldest = this.ratelimStats.keys().next().value;
+            if(oldest) {
+                this.ratelimStats.delete(oldest);
+            }
+        }
+        this.ratelimStats.set(key, {start: Date.now(), count: 1});
+        return true;
+    }
+
+}
+
+export class IpRateLimitDecorator extends RateLimitDecorator<string> {
     protected decorate(config: PresetRouteOptions): PresetRouteOptions {
         config.onRequest = async (req: FastifyRequest, resp: FastifyReply) => {
-            const stats = this.ratelimStats.get(req.ip);
-            if(stats) {
-                if(Date.now() - stats.start < this.maxAge) {
-                    if(stats.count >= this.maxRate) {
-                        req.log.warn("Rate limit exceeded for IP %s on route %s", req.ip, config.url);
-                        resp.status(429);
-                        return;
-                    }
-                    else {
-                        stats.count++;
-                        return;
-                    }
-                }
-            }
+            this.checkRateLimit(req.ip, req, resp);
+        };
+        return config;
+    }
+}
 
-            if(this.ratelimStats.size >= 100000) {
-                const oldest = this.ratelimStats.keys().next().value;
-                if(oldest) {
-                    this.ratelimStats.delete(oldest);
-                }
-            }
-            this.ratelimStats.set(req.ip, {start: Date.now(), count: 1});
+export class UserRateLimitDecorator extends RateLimitDecorator<number> {
+    protected decorate(config: PresetRouteOptions): PresetRouteOptions {
+        config.onRequest = async (req: FastifyRequest, resp: FastifyReply) => {
+            this.checkRateLimit(req.session!.user!.id, req, resp);
         };
         return config;
     }

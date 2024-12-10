@@ -7,8 +7,12 @@ import { Repository } from "./repository";
 export interface UserRepository extends Repository<User, number> {
     getById(id: number): Promise<User>;
     getByEmail(email: string): Promise<User>;
+    hasEmail(email: string): Promise<boolean>;
+    countAvatarUsers(avatarId: string): Promise<number>;
 
     update(user: User): Promise<boolean>;
+
+    deletePending(limit?: number): Promise<boolean>;
 }
 
 //Key is a hash in binary form

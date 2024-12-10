@@ -56,6 +56,13 @@ class PgUserRepository implements UserRepository {
             .executeTakeFirstOrThrow(() => new DataNotFoundError("user"));
     }
 
+    async hasEmail(email: string): Promise<boolean> {
+        return (await this.db.selectFrom("users")
+            .select(sql`1`.as("exists"))
+            .where("email", "=", email)
+            .executeTakeFirst()) !== undefined;
+    }
+
     async create(item: User): Promise<number> {
         return (await this.db.insertInto("users")
             .values({
@@ -70,7 +77,14 @@ class PgUserRepository implements UserRepository {
 
     async update(item: User): Promise<boolean> {
         return ((await this.db.updateTable("users")
-            .set(item)
+            .set({
+                name: item.name,
+                email: item.email,
+                password_hash: item.password_hash,
+                state: item.state,
+                role: item.role,
+                avatar_id: item.avatar_id
+            })
             .where("id", "=", item.id)
             .execute())[0]?.numChangedRows ?? 0) > 0;
     }
@@ -79,6 +93,22 @@ class PgUserRepository implements UserRepository {
         return ((await this.db.deleteFrom("users")
             .where("id", "=", id)
             .execute())[0]?.numDeletedRows ?? 0) > 0;
+    }
+
+    async deletePending(limit = 1): Promise<boolean> {
+        return ((await this.db.deleteFrom("users")
+            .where("id", "in", 
+                this.db.selectFrom("users").where("state", "=", State.deletion_pending).limit(limit))
+            .execute())[0]?.numDeletedRows ?? 0) > 0;
+    }
+
+    async countAvatarUsers(avatarId: string): Promise<number> {
+        return (await this.db.selectFrom("users")
+            .select(({fn}) => [
+                fn.count<number>("avatar_id").as("avatar_users")
+            ])
+            .where("avatar_id", "=", avatarId)
+            .executeTakeFirst())?.avatar_users ?? 0;
     }
     
 }

@@ -4,9 +4,10 @@
   "description": "Wemorize backend",
   "main": "target/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node target/index.js",
-    "lint": "eslint -c ../../eslint.config.mjs src"
+    "lint": "eslint -c ../../eslint.config.mjs src",
+    "build": "npm -w @wemorize/common run build && tsc --build -v tsconfig.json",
+    "start": "npm run build && node target/index.js",
+    "watch": "nodemon -e ts,tpl,js --spawn --watch src --watch ../common/src -x npm run start"
   },
   "author": "Friedrich Zimniak",
   "license": "MIT",
@@ -21,9 +22,10 @@
     "fastify": "^5.1.0",
     "handlebars": "^4.7.8",
     "i18next": "^24.0.5",
-    "pg": "^8.13.1",
     "kysely": "^0.27.5",
-    "nodemailer": "^6.9.16"
+    "nodemailer": "^6.9.16",
+    "pg": "^8.13.1",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@types/nodemailer": "^6.4.17",

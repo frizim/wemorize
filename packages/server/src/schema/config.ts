@@ -1,3 +1,4 @@
+import path from "path";
 import { Schema } from "./schema";
 
 interface ListenConfig {
@@ -31,6 +32,7 @@ export class Config {
         port: 80
     };
     readonly baseUrl: string = "localhost";
+    readonly dataDir: string = path.resolve("../../data");
     readonly instanceName: string = "Wemorize";
     readonly enableRegistration: boolean = false;
     readonly storage: DatabaseConfig | undefined;
@@ -57,6 +59,9 @@ export class ConfigSchema extends Schema<Config> {
                     }
                 },
                 baseUrl: {
+                    type: "string"
+                },
+                dataDir: {
                     type: "string"
                 },
                 instanceName: {
