@@ -1,0 +1,100 @@
+{
+    "translation": {
+        "pages": {
+            "resetPassword": "Neues Passwort festlegen",
+            "login": "Login",
+            "dashboard": "Dashboard",
+            "register": "Registrieren",
+            "forgotPassword": "Passwort zurücksetzen"
+        },
+        "fields": {
+            "username": "Benutzername",
+            "email": "E-Mail",
+            "password": "Passwort",
+            "confirmPassword": "Passwort bestätigen",
+            "tosAccepted": "Ich stimme den Nutzungsbedingungen zu",
+            "privacyPolicyAccepted": "Ich stimme der Verarbeitung meiner persönlichen Daten gemäß der Datenschutzerklärung zu"
+        },
+        "login": {
+            "title": "Einloggen",
+            "authFailed": "Benutzername oder Passwort ungültig",
+            "stateunverified": "Bitte bestätige deine E-Mail-Adresse, bevor du dich anmeldest",
+            "stateblocked": "Dein Benutzerkonto wurde gesperrt, bitte wende dich an den Support",
+            "statepending_deletion": "Dieses Benutzerkonto ist zur Löschung markiert"
+        },
+        "register": {
+            "title": "Registrieren",
+            "passwordsNotMatching": "Das Passwort muss in beiden Feldern übereinstimmen.",
+            "confirmationPending": "Fast geschafft! Sobald du eine E-Mail von uns erhalten hast, klicke darin auf den Bestätigungslink, um die Registrierung abzuschließen."
+        },
+        "buttons": {
+            "register": "Jetzt Registrieren",
+            "login": "Einloggen",
+            "forgotPassword": "Passwort zurücksetzen"
+        },
+        "legalNotice": {
+            "title": "Impressum"
+        },
+        "privacyPolicy": {
+            "title": "Datenschutz"
+        },
+        "tos": {
+            "title": "Nutzungsbedingungen"
+        },
+        "help": {
+            "title": "Hilfe"
+        },
+        "forgotPassword": {
+            "title": "Passwort zurücksetzen",
+            "linkSent": "Du solltest gleich eine E-Mail von uns erhalten. Klicke darin auf den Link, um ein neues Passwort festzulegen.",
+            "link": "Ich habe mein Passwort vergessen"
+        },
+        "courses": {
+            "noneAvailable": "Du bist noch in keinem Kurs",
+            "openList": "Kurse entdecken",
+            "search": {
+                "noResults": "Keine Kurse gefunden"
+            }
+        },
+        "course": {
+            "madeBy": "von {{creator}}",
+            "dailyGoal": "Dein Tagesziel: {{goal}} Karten",
+            "startRegular": "Weiter Lernen",
+            "startRep": "Wiederholen",
+            "settings": "Einstellungen",
+            "leave": "Kurs verlassen",
+            "enroll": "Beitreten"
+        },
+        "userMenu": {
+            "profile": "Dein Profil",
+            "settings": "Einstellungen",
+            "logout": "Ausloggen"
+        },
+        "communications": {
+            "registerVerifySubject": "Bestätige jetzt deine Registrierung",
+            "greeting": "Hallo {{username}},",
+            "welcome": "wir freuen uns sehr, dass du dich unserer Community anschließen und mit uns zusammen lernen möchtest.",
+            "activationLink": "Bitte klicke auf den folgenden Link, um die Registrierung abzuschließen: ",
+            "nonIntentionalRegistration": "Falls du dich doch nicht registrieren möchtest, musst du nichts weiter tun. Ohne Bestätigung werden die Registrierungsdaten innerhalb von 12 Stunden gelöscht.",
+            "signoff": "Bis bald!"
+        },
+        "errors": {
+            "generic": {
+                "title": "Fehler",
+                "description": "Diese Aktion kann zur Zeit nicht ausgeführt werden. Versuche es später erneut oder wende dich an den Support."
+            },
+            "notFound": {
+                "title": "Nicht gefunden",
+                "description": "Diese Ressource existiert nicht. Möglicherweise wurde sie umbenannt, gelöscht oder die URL enthält einen Tippfehler."
+            },
+            "badRequest": {
+                "title": "Ungültige Eingabe",
+                "description": "Die letzte Eingabe war nicht gültig. Bitte versuche es erneut."
+            }
+        },
+        "aria": {
+            "headerMenu": "Hauptmenü",
+            "footerMenu": "Weitere Links"
+        }
+    }
+}
