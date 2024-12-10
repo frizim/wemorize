@@ -1,7 +1,7 @@
-import { Config } from "./schema/config";
 import { StorageProvider } from "./storage/provider";
 import { PgStorageProvider } from "./storage/postgres/pg_provider";
 
+import { Config } from "./schema/config";
 import { LoginController } from "./controller/user/login";
 import { LogoutController } from "./controller/user/logout";
 import { RegisterController } from "./controller/user/register";
@@ -9,9 +9,12 @@ import { VerifyController } from "./controller/user/verify";
 
 import { fastify, FastifyInstance } from "fastify";
 import formbody from "@fastify/formbody";
-import { serialize } from "cookie";
 import fastifyView from "@fastify/view";
+import { serialize } from "cookie";
 import Handlebars from "handlebars";
+import i18next from "i18next";
+import fs from "node:fs/promises";
+import { Dashboard } from "./controller/dashboard";
 
 export class WemorizeApplication {
 
@@ -72,6 +75,7 @@ export class WemorizeApplication {
         });
 
         app.session();
+        await app.i18n();
         app.view();
         app.errorHandlers();
         app.routes();
@@ -123,6 +127,25 @@ export class WemorizeApplication {
         });
     }
 
+    private async i18n() {
+        await i18next.init({
+            lng: "de",
+            resources: {}
+        });
+
+        const files = await fs.readdir("./src/view/i18n");
+        for(const file of files) {
+            i18next.addResourceBundle(file.replace(".json", ""), "", JSON.parse((await fs.readFile("./src/view/i18n/" + file)).toString()));
+        }
+    
+        Handlebars.registerHelper("i18n", (key: string, args: {hash: Record<string, string>}) => {
+            return new Handlebars.SafeString(i18next.t(key, {
+                ...args.hash,
+                returnObject: false
+            }));
+        });
+    }
+
     private errorHandlers() {
         this.server.setNotFoundHandler(async (req, resp) => {
             return resp.status(404).viewAsync("error.tpl", {
@@ -166,6 +189,8 @@ export class WemorizeApplication {
         new LoginController().register(this.server);
         new LogoutController().register(this.server);
         new VerifyController().register(this.server);
+
+        new Dashboard().register(this.server);
     }
 
     private session() {
