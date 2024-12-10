@@ -1,0 +1,170 @@
+@use "beercss-custom.css";
+
+:root {
+    --font-icon: "Material Symbols Sharp";
+}
+
+:root, body.light {
+    --primary: #35693E;
+    --surface-tint: #35693E;
+    --on-primary: #FFFFFF;
+    --primary-container: #B7F1BA;
+    --on-primary-container: #002109;
+    --secondary: #516351;
+    --on-secondary: #FFFFFF;
+    --secondary-container: #D4E8D1;
+    --on-secondary-container: #0F1F11;
+    --tertiary: #39656D;
+    --on-tertiary: #FFFFFF;
+    --tertiary-container: #BDEAF3;
+    --on-tertiary-container: #03090a;
+    --error: #BA1A1A;
+    --on-error: #FFFFFF;
+    --error-container: #FFDAD6;
+    --on-error-container: #410002;
+    --background: #F7FBF2;
+    --on-background: #181D18;
+    --surface: #F7FBF2;
+    --on-surface: #181D18;
+    --surface-variant: #DDE5DA;
+    --on-surface-variant: #414941;
+    --outline: #727970;
+    --outline-variant: #C1C9BE;
+    --shadow: #000000;
+    --scrim: #000000;
+    --inverse-surface: #2D322C;
+    --inverse-on-surface: #EEF2EA;
+    --inverse-primary: #9BD4A0;
+    --primary-fixed: #B7F1BA;
+    --on-primary-fixed: #002109;
+    --primary-fixed-dim: #9BD4A0;
+    --on-primary-fixed-variant: #1C5129;
+    --secondary-fixed: #D4E8D1;
+    --on-secondary-fixed: #0F1F11;
+    --secondary-fixed-dim: #B8CCB6;
+    --on-secondary-fixed-variant: #3A4B3A;
+    --tertiary-fixed: #BDEAF3;
+    --on-tertiary-fixed: #001F24;
+    --tertiary-fixed-dim: #A1CED7;
+    --on-tertiary-fixed-variant: #1F4D54;
+    --surface-dim: #D7DBD3;
+    --surface-bright: #F7FBF2;
+    --surface-container-lowest: #FFFFFF;
+    --surface-container-low: #F1F5EC;
+    --surface-container: #EBEFE7;
+    --surface-container-high: #E5E9E1;
+    --surface-container-highest: #E0E4DC;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root, body, body.dark {
+        --primary: #9BD4A0;
+        --surface-tint: #9BD4A0;
+        --on-primary: #003915;
+        --primary-container: #1C5129;
+        --on-primary-container: #B7F1BA;
+        --secondary: #B8CCB6;
+        --on-secondary: #243425;
+        --secondary-container: #3A4B3A;
+        --on-secondary-container: #D4E8D1;
+        --tertiary: #A1CED7;
+        --on-tertiary: #00363D;
+        --tertiary-container: #1F4D54;
+        --on-tertiary-container: #BDEAF3;
+        --error: #FFB4AB;
+        --onError: #690005;
+        --error-container: #93000A;
+        --onError-container: #FFDAD6;
+        --background: #101510;
+        --on-background: #E0E4DC;
+        --surface: #101510;
+        --on-surface: #E0E4DC;
+        --surface-variant: #414941;
+        --on-surface-variant: #C1C9BE;
+        --outline: #8B9389;
+        --outline-variant: #414941;
+        --shadow: #000000;
+        --scrim: #000000;
+        --inverse-surface: #E0E4DC;
+        --inverse-on-surface: #2D322C;
+        --inverse-primary: #35693E;
+        --primary-fixed: #B7F1BA;
+        --on-primary-fixed: #002109;
+        --primary-fixed-dim: #9BD4A0;
+        --on-primary-fixed-variant: #1C5129;
+        --secondary-fixed: #D4E8D1;
+        --on-secondary-fixed: #0F1F11;
+        --secondary-fixed-dim: #B8CCB6;
+        --on-secondary-fixed-variant: #3A4B3A;
+        --tertiary-fixed: #BDEAF3;
+        --on-tertiary-fixed: #001F24;
+        --tertiary-fixed-dim: #A1CED7;
+        --on-tertiary-fixed-variant: #1F4D54;
+        --surface-dim: #101510;
+        --surface-bright: #363A35;
+        --surface-container-lowest: #0B0F0B;
+        --surface-container-low: #181D18;
+        --surface-container: #1C211C;
+        --surface-container-high: #262B26;
+        --surface-container-highest: #313630;
+    }
+}
+
+html {
+    width: 100%;
+    height: 100%;
+}
+
+menu > form > .button {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0px;
+    margin-right: 0px;
+    width: 100%;
+    text-align: left;
+    min-block-size: 3rem;
+    border-radius: 0 !important;
+}
+
+menu > form > .button:hover {
+    background-color: var(--surface-dim) !important;
+}
+
+menu form {
+    margin-block-start: 0 !important;
+}
+
+form:has(input:invalid) button {
+    background-color: var(--outline) !important;
+}
+
+input:user-invalid {
+    border-color: var(--error);
+}
+
+body {
+    display: grid;
+    grid-template-rows: 0fr 1fr 0fr;
+    height:100%;
+    min-height: 100%;
+    max-width: 100vw;
+    min-block-size: 100vh;
+}
+
+main.container {
+    align-self: stretch;
+    padding-bottom: 10px;
+    min-width: 33%;
+    max-width: 100%;
+}
+
+form {
+    max-width: 600px !important;
+    margin: 0 auto;
+}
+
+nav {
+    padding-left: 5px;
+    padding-right: 5px;
+}
