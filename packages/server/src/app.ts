@@ -8,6 +8,9 @@ import { RegisterController } from "./controller/user/register";
 import { VerifyController } from "./controller/user/verify";
 import { Dashboard } from "./controller/dashboard";
 import { SearchCoursesController } from "./controller/course/search_courses";
+import { ForgotPasswordController } from "./controller/user/forgot_password";
+import { ResetPasswordController } from "./controller/user/reset_password";
+import { EnrollController } from "./controller/course/enroll";
 
 import { fastify, FastifyInstance } from "fastify";
 import formbody from "@fastify/formbody";
@@ -19,8 +22,6 @@ import i18next from "i18next";
 import { createTransport } from "nodemailer";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { ForgotPasswordController } from "./controller/user/forgot_password";
-import { ResetPasswordController } from "./controller/user/reset_password";
 
 export class WemorizeApplication {
 
@@ -227,6 +228,7 @@ export class WemorizeApplication {
 
         new Dashboard().register(this.server);
         new SearchCoursesController().register(this.server);
+        new EnrollController().register(this.server);
     }
 
     private session() {
