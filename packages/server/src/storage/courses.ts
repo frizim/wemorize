@@ -7,6 +7,7 @@ export interface CourseRepository extends Repository<Course, number> {
 }
 
 export interface CourseLanguageRepository extends Repository<CourseLanguage, number> {
+    getById(id: number): Promise<CourseLanguage>;
     match(namePrefix: string, lang: string): Promise<CourseLanguage[]>;
 }
 

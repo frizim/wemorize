@@ -113,7 +113,10 @@ export class PgCourseLanguageRepository implements CourseLanguageRepository {
     }
 
     getById(id: number): Promise<CourseLanguage> {
-        throw new Error("Method not implemented.");
+        return this.db.selectFrom("course_languages")
+            .selectAll()
+            .where("id", "=", id)
+            .executeTakeFirstOrThrow(() => new DataNotFoundError("course_language"));
     }
 
     create(item: CourseLanguage): Promise<number> {
