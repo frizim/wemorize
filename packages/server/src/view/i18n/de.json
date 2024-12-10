@@ -1,107 +1,145 @@
 {
-    "translation": {
-        "pages": {
-            "resetPassword": "Neues Passwort festlegen",
-            "login": "Login",
-            "dashboard": "Dashboard",
-            "register": "Registrieren",
-            "forgotPassword": "Passwort zurücksetzen"
+    "pages": {
+        "resetPassword": "Neues Passwort festlegen",
+        "login": "Login",
+        "dashboard": "Dashboard",
+        "register": "Registrieren",
+        "forgotPassword": "Passwort zurücksetzen",
+        "settings": "Einstellungen"
+    },
+    "fields": {
+        "username": "Benutzername",
+        "email": "E-Mail",
+        "password": "Passwort",
+        "newPassword": "Neues Passwort",
+        "confirmPassword": "Passwort bestätigen",
+        "tosAccepted": "Ich stimme den Nutzungsbedingungen zu",
+        "privacyPolicyAccepted": "Ich stimme der Verarbeitung meiner persönlichen Daten gemäß der Datenschutzerklärung zu",
+        "dailyGoal": {
+            "prefix": "Tagesziel:",
+            "unit": "Karten"
         },
-        "fields": {
-            "username": "Benutzername",
-            "email": "E-Mail",
-            "password": "Passwort",
-            "confirmPassword": "Passwort bestätigen",
-            "tosAccepted": "Ich stimme den Nutzungsbedingungen zu",
-            "privacyPolicyAccepted": "Ich stimme der Verarbeitung meiner persönlichen Daten gemäß der Datenschutzerklärung zu",
-            "dailyGoal": {
-                "prefix": "Tagesziel:",
-                "unit": "Karten"
-            },
-            "enableReminder": "Tägliche Erinnerung"
-        },
-        "login": {
-            "title": "Einloggen",
-            "authFailed": "Benutzername oder Passwort ungültig",
-            "stateunverified": "Bitte bestätige deine E-Mail-Adresse, bevor du dich anmeldest",
-            "stateblocked": "Dein Benutzerkonto wurde gesperrt, bitte wende dich an den Support",
-            "statepending_deletion": "Dieses Benutzerkonto ist zur Löschung markiert"
-        },
-        "register": {
-            "title": "Registrieren",
-            "passwordsNotMatching": "Das Passwort muss in beiden Feldern übereinstimmen.",
-            "confirmationPending": "Fast geschafft! Sobald du eine E-Mail von uns erhalten hast, klicke darin auf den Bestätigungslink, um die Registrierung abzuschließen."
-        },
-        "buttons": {
-            "register": "Jetzt Registrieren",
-            "login": "Einloggen",
-            "forgotPassword": "Passwort zurücksetzen"
-        },
-        "legalNotice": {
-            "title": "Impressum"
-        },
-        "privacyPolicy": {
-            "title": "Datenschutz"
-        },
-        "tos": {
-            "title": "Nutzungsbedingungen"
-        },
-        "help": {
-            "title": "Hilfe"
-        },
-        "forgotPassword": {
-            "title": "Passwort zurücksetzen",
-            "linkSent": "Du solltest gleich eine E-Mail von uns erhalten. Klicke darin auf den Link, um ein neues Passwort festzulegen.",
-            "link": "Ich habe mein Passwort vergessen"
-        },
-        "courses": {
-            "noneAvailable": "Du bist noch in keinem Kurs",
-            "openList": "Kurse entdecken",
-            "search": {
-                "noResults": "Keine Kurse gefunden"
-            }
-        },
-        "course": {
-            "madeBy": "von {{creator}}",
-            "dailyGoal": "Dein Tagesziel: {{goal}} Karten",
-            "startRegular": "Weiter Lernen",
-            "startRep": "Wiederholen",
-            "settings": "Einstellungen",
-            "leave": "Kurs verlassen",
-            "enroll": "Beitreten"
-        },
-        "userMenu": {
-            "profile": "Dein Profil",
-            "settings": "Einstellungen",
-            "logout": "Ausloggen"
-        },
-        "communications": {
-            "registerVerifySubject": "Bestätige jetzt deine Registrierung",
-            "greeting": "Hallo {{username}},",
-            "welcome": "wir freuen uns sehr, dass du dich unserer Community anschließen und mit uns zusammen lernen möchtest.",
-            "activationLink": "Bitte klicke auf den folgenden Link, um die Registrierung abzuschließen: ",
-            "nonIntentionalRegistration": "Falls du dich doch nicht registrieren möchtest, musst du nichts weiter tun. Ohne Bestätigung werden die Registrierungsdaten innerhalb von 12 Stunden gelöscht.",
-            "signoff": "Bis bald!",
-            "resetPassword": "wir haben eine Anfrage zur Zurücksetzung deines Passworts erhalten. Klicke auf den folgenden Link, um ein neues Passwort festzulegen:",
-            "nonIntentionalReset": "Falls du dein Passwort nicht zurücksetzen möchtest, ignoriere diese E-Mail einfach."
-        },
-        "errors": {
-            "generic": {
-                "title": "Fehler",
-                "description": "Diese Aktion kann zur Zeit nicht ausgeführt werden. Versuche es später erneut oder wende dich an den Support."
-            },
-            "notFound": {
-                "title": "Nicht gefunden",
-                "description": "Diese Ressource existiert nicht. Möglicherweise wurde sie umbenannt, gelöscht oder die URL enthält einen Tippfehler."
-            },
-            "badRequest": {
-                "title": "Ungültige Eingabe",
-                "description": "Die letzte Eingabe war nicht gültig. Bitte versuche es erneut."
-            }
-        },
-        "aria": {
-            "headerMenu": "Hauptmenü",
-            "footerMenu": "Weitere Links"
+        "enableReminder": "Tägliche Erinnerung"
+    },
+    "login": {
+        "title": "Einloggen",
+        "authFailed": "Benutzername oder Passwort ungültig",
+        "stateunverified": "Bitte bestätige deine E-Mail-Adresse, bevor du dich anmeldest",
+        "stateblocked": "Dein Benutzerkonto wurde gesperrt, bitte wende dich an den Support",
+        "statepending_deletion": "Dieses Benutzerkonto ist zur Löschung markiert"
+    },
+    "register": {
+        "title": "Registrieren",
+        "passwordsNotMatching": "Das Passwort muss in beiden Feldern übereinstimmen.",
+        "confirmationPending": "Fast geschafft! Sobald du eine E-Mail von uns erhalten hast, klicke darin auf den Bestätigungslink, um die Registrierung abzuschließen."
+    },
+    "buttons": {
+        "register": "Jetzt Registrieren",
+        "login": "Einloggen",
+        "forgotPassword": "Passwort zurücksetzen"
+    },
+    "legalNotice": {
+        "title": "Impressum"
+    },
+    "privacyPolicy": {
+        "title": "Datenschutz"
+    },
+    "tos": {
+        "title": "Nutzungsbedingungen"
+    },
+    "help": {
+        "title": "Hilfe"
+    },
+    "forgotPassword": {
+        "title": "Passwort zurücksetzen",
+        "linkSent": "Du solltest gleich eine E-Mail von uns erhalten. Klicke darin auf den Link, um ein neues Passwort festzulegen.",
+        "link": "Ich habe mein Passwort vergessen"
+    },
+    "courses": {
+        "noneAvailable": "Du bist noch in keinem Kurs",
+        "openList": "Kurse entdecken",
+        "search": {
+            "noResults": "Keine Kurse gefunden"
         }
+    },
+    "course": {
+        "madeBy": "von {{creator}}",
+        "dailyGoal": "Dein Tagesziel: {{goal}} Karten",
+        "startRegular": "Weiter Lernen",
+        "startRep": "Wiederholen",
+        "settings": "Einstellungen",
+        "leave": "Kurs verlassen",
+        "enroll": "Beitreten"
+    },
+    "userMenu": {
+        "profile": "Dein Profil",
+        "settings": "Einstellungen",
+        "logout": "Ausloggen"
+    },
+    "profile": {
+        "title": "Profil",
+        "edit": "Bearbeiten",
+        "progress": "Fortschritte",
+        "enrolled_count": "In {{count}} Kursen aktiv",
+        "stats": "Statistiken",
+        "highest_rank": "Höchster Rang: {{rank}} in {{name}}",
+        "highest_streak": "Größte Streak: {{streak}} Tage"
+    },
+    "settings": {
+        "uploadAvatar": "Profilbild hochladen",
+        "deleteAvatar": "Profilbild löschen",
+        "avatar": "Profilbild",
+        "getDataArchive": "Datenarchiv anfordern",
+        "deleteAccount": "Benutzerkonto löschen",
+        "deletionWarning": "Wenn du dein Benutzerkonto löschst, gehen folgende Inhalte endgültig verloren:",
+        "deletionDataLoss": {
+            "profile": "Dein Profil",
+            "progress": "Deine Lernfortschritte in allen Kursen",
+            "ranking": "Deine Position in den Bestenlisten"
+        },
+        "deletionCourses": "Von dir erstellte Kurse werden nicht gelöscht, aber du wirst nicht mehr als Ersteller angegeben.",
+        "deletionConfirm": "Um die Löschung zu bestätigen, gib bitte dein Passwort ein.",
+        "saveSettings": "Einstellungen speichern",
+        "confirmDeletion": "Löschung bestätigen",
+        "emailState": {
+            "verified": "Bestätigt",
+            "verifyPending": "Muss noch bestätigt werden"
+        }
+    },
+    "communications": {
+        "registerVerifySubject": "Bestätige jetzt deine Registrierung",
+        "greeting": "Hallo {{username}},",
+        "welcome": "wir freuen uns sehr, dass du dich unserer Community anschließen und mit uns zusammen lernen möchtest.",
+        "activationLink": "Bitte klicke auf den folgenden Link, um die Registrierung abzuschließen: ",
+        "nonIntentionalRegistration": "Falls du dich doch nicht registrieren möchtest, musst du nichts weiter tun. Ohne Bestätigung werden die Registrierungsdaten innerhalb von 12 Stunden gelöscht.",
+        "signoff": "Bis bald!",
+        "resetPassword": "wir haben eine Anfrage zur Zurücksetzung deines Passworts erhalten. Klicke auf den folgenden Link, um ein neues Passwort festzulegen:",
+        "nonIntentionalReset": "Falls du dein Passwort nicht zurücksetzen möchtest, ignoriere diese E-Mail einfach."
+    },
+    "errors": {
+        "generic": {
+            "title": "Fehler",
+            "description": "Diese Aktion kann zur Zeit nicht ausgeführt werden. Versuche es später erneut oder wende dich an den Support."
+        },
+        "notFound": {
+            "title": "Nicht gefunden",
+            "description": "Diese Ressource existiert nicht. Möglicherweise wurde sie umbenannt, gelöscht oder die URL enthält einen Tippfehler."
+        },
+        "badRequest": {
+            "title": "Ungültige Eingabe",
+            "description": "Die letzte Eingabe war nicht gültig. Bitte versuche es erneut."
+        },
+        "wrongPassword": "Ungültiges Passwort",
+        "deletingAvatar": "Fehler beim Löschen des Profilbilds, bitte versuche es später erneut",
+        "image": {
+            "invalidSize": "Das Bild muss zwischen {{min}} x {{min}} und {{max}} x {{max}} Pixel groß sein",
+            "invalidFormat": "Das Bildformat wird nicht unterstützt. Nutze eines der folgenden Formate: {{formats}}",
+            "invalidContent": "Das hochgeladene Bild ist beschädigt oder enthält ungültige Daten",
+            "errorSaving": "Fehler beim Speichern der Datei, bitte versuche es später erneut"
+        }
+    },
+    "aria": {
+        "headerMenu": "Hauptmenü",
+        "footerMenu": "Weitere Links"
     }
 }
