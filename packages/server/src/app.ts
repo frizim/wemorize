@@ -15,6 +15,7 @@ import Handlebars from "handlebars";
 import i18next from "i18next";
 import fs from "node:fs/promises";
 import { Dashboard } from "./controller/dashboard";
+import { SearchCoursesController } from "./controller/course/search_courses";
 
 export class WemorizeApplication {
 
@@ -192,6 +193,7 @@ export class WemorizeApplication {
         new VerifyController().register(this.server);
 
         new Dashboard().register(this.server);
+        new SearchCoursesController().register(this.server);
     }
 
     private session() {

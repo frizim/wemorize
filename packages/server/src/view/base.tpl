@@ -27,7 +27,12 @@
                 <div class="nav-overlay max" id="course-search-bar">
                     <form class="field fill">
                         {{reqTokenField reqToken}}
-                        <input id="course-search" name="prefix" class="search-input" type="search" minlength="2" maxlength="200" required="required">
+                        <input id="course-search" name="prefix" class="search-input" type="search" minlength="2" maxlength="200" required="required"
+                            hx-validate="true"
+                            hx-post="/courses/search"
+                            hx-trigger="input changed delay:400ms, click from:#show-search"
+                            hx-target="#search-overlay"
+                            hx-swap="outerHTML">
                     </form>
                     <button class="transparent" id="hide-search"><i>close</i></button>
                 </div>
