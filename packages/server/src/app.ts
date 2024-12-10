@@ -107,7 +107,8 @@ export class WemorizeApplication {
             },
             options: {
                 partials: {
-                    base: "base.tpl"
+                    base: "base.tpl",
+                    email: "email.tpl"
                 },
                 compileOptions: {
                     strict: true
