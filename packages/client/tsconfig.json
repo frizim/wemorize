@@ -1,5 +1,6 @@
 {
     "extends": "../../tsconfig.json",
+    "type": "module",
     "compilerOptions": {
         "rootDir": "src",
         "outDir": "target"
@@ -8,5 +9,10 @@
         {
             "path": "../common"
         }
-    ]
+    ],
+    "parserOptions": {
+        "projectService": {
+            "allowDefaultProject": ["*.ts", "*.mjs"]
+        }
+    }
 }
