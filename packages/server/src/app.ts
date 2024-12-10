@@ -73,6 +73,7 @@ export class WemorizeApplication {
 
         app.session();
         app.view();
+        app.errorHandlers();
         app.routes();
 
         return app;
@@ -110,12 +111,54 @@ export class WemorizeApplication {
             }
         });
 
+        Handlebars.registerHelper("reqTokenField", (token: string) => {
+            return new Handlebars.SafeString('<input type="hidden" name="request_token" value="' + Handlebars.Utils.escapeExpression(token) + '">');
+        });
+
         this.server.decorateReply("showMessage", function(route: string, messageId: string) {
             this.header("set-cookie", serialize("msg-" + route, messageId, {
                 httpOnly: true,
                 sameSite: "strict"
             }));
-        });    
+        });
+    }
+
+    private errorHandlers() {
+        this.server.setNotFoundHandler(async (req, resp) => {
+            return resp.status(404).viewAsync("error.tpl", {
+                errTitle: "errors.notFound.title",
+                errDescription: "errors.notFound.description"
+            });
+        });
+    
+        this.server.setErrorHandler(async (err, req, resp) => {
+            let errTemplate = "generic";
+            let status = 500;
+    
+            if(err.code === "FST_ERR_VALIDATION") {
+                if(req.method === "get") {
+                    errTemplate = "badRequest";
+                    status = 400;
+                }
+                else {
+                    const route = req.routeOptions.url ?? "/";
+                    resp.showMessage(route, "errors.badRequest.description");
+                    return resp.redirect(route);
+                }
+            }
+            else if(err.code === "FST_ERR_NOT_FOUND") {
+                errTemplate = "notFound";
+                status = 404;
+            }
+            else {
+                this.server.log.error(err);
+            }
+    
+            return resp.status(status).viewAsync("error.tpl", {
+                errTitle: `errors.${errTemplate}.title`,
+                errDescription: `errors.${errTemplate}.description`
+            });
+        });
     }
 
     private routes() {
