@@ -13,7 +13,12 @@
             "password": "Passwort",
             "confirmPassword": "Passwort bestätigen",
             "tosAccepted": "Ich stimme den Nutzungsbedingungen zu",
-            "privacyPolicyAccepted": "Ich stimme der Verarbeitung meiner persönlichen Daten gemäß der Datenschutzerklärung zu"
+            "privacyPolicyAccepted": "Ich stimme der Verarbeitung meiner persönlichen Daten gemäß der Datenschutzerklärung zu",
+            "dailyGoal": {
+                "prefix": "Tagesziel:",
+                "unit": "Karten"
+            },
+            "enableReminder": "Tägliche Erinnerung"
         },
         "login": {
             "title": "Einloggen",
@@ -76,7 +81,9 @@
             "welcome": "wir freuen uns sehr, dass du dich unserer Community anschließen und mit uns zusammen lernen möchtest.",
             "activationLink": "Bitte klicke auf den folgenden Link, um die Registrierung abzuschließen: ",
             "nonIntentionalRegistration": "Falls du dich doch nicht registrieren möchtest, musst du nichts weiter tun. Ohne Bestätigung werden die Registrierungsdaten innerhalb von 12 Stunden gelöscht.",
-            "signoff": "Bis bald!"
+            "signoff": "Bis bald!",
+            "resetPassword": "wir haben eine Anfrage zur Zurücksetzung deines Passworts erhalten. Klicke auf den folgenden Link, um ein neues Passwort festzulegen:",
+            "nonIntentionalReset": "Falls du dein Passwort nicht zurücksetzen möchtest, ignoriere diese E-Mail einfach."
         },
         "errors": {
             "generic": {

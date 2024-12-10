@@ -145,3 +145,45 @@ export class GuardNonAuthenticatedDecorator extends ControllerConfigurationDecor
     }
     
 }
+
+export class IpRateLimitDecorator extends ControllerConfigurationDecorator {
+
+    private readonly ratelimStats: Map<string, {start: EpochTimeStamp, count: number}>;
+    private readonly maxRate: number;
+    private readonly maxAge: number;
+
+    public constructor(wrapped: ControllerConfiguration, maxRate: number, maxAge: number) {
+        super(wrapped);
+        this.ratelimStats = new Map();
+        this.maxRate = maxRate;
+        this.maxAge = maxAge;
+    }
+
+    protected decorate(config: PresetRouteOptions): PresetRouteOptions {
+        config.onRequest = async (req: FastifyRequest, resp: FastifyReply) => {
+            const stats = this.ratelimStats.get(req.ip);
+            if(stats) {
+                if(Date.now() - stats.start < this.maxAge) {
+                    if(stats.count >= this.maxRate) {
+                        req.log.warn("Rate limit exceeded for IP %s on route %s", req.ip, config.url);
+                        resp.status(429);
+                        return;
+                    }
+                    else {
+                        stats.count++;
+                        return;
+                    }
+                }
+            }
+
+            if(this.ratelimStats.size >= 100000) {
+                const oldest = this.ratelimStats.keys().next().value;
+                if(oldest) {
+                    this.ratelimStats.delete(oldest);
+                }
+            }
+            this.ratelimStats.set(req.ip, {start: Date.now(), count: 1});
+        };
+        return config;
+    }
+}

@@ -19,6 +19,8 @@ import i18next from "i18next";
 import { createTransport } from "nodemailer";
 import fs from "node:fs/promises";
 import path from "node:path";
+import { ForgotPasswordController } from "./controller/user/forgot_password";
+import { ResetPasswordController } from "./controller/user/reset_password";
 
 export class WemorizeApplication {
 
@@ -220,6 +222,8 @@ export class WemorizeApplication {
         new LoginController().register(this.server);
         new LogoutController().register(this.server);
         new VerifyController().register(this.server);
+        new ForgotPasswordController().register(this.server);
+        new ResetPasswordController().register(this.server);
 
         new Dashboard().register(this.server);
         new SearchCoursesController().register(this.server);
