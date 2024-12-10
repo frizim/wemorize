@@ -6,16 +6,19 @@ import { LoginController } from "./controller/user/login";
 import { LogoutController } from "./controller/user/logout";
 import { RegisterController } from "./controller/user/register";
 import { VerifyController } from "./controller/user/verify";
+import { Dashboard } from "./controller/dashboard";
+import { SearchCoursesController } from "./controller/course/search_courses";
 
 import { fastify, FastifyInstance } from "fastify";
 import formbody from "@fastify/formbody";
 import fastifyView from "@fastify/view";
+import fastifyStatic from "@fastify/static";
 import { serialize } from "cookie";
 import Handlebars from "handlebars";
 import i18next from "i18next";
+import { createTransport } from "nodemailer";
 import fs from "node:fs/promises";
-import { Dashboard } from "./controller/dashboard";
-import { SearchCoursesController } from "./controller/course/search_courses";
+import path from "node:path";
 
 export class WemorizeApplication {
 
@@ -79,7 +82,9 @@ export class WemorizeApplication {
         await app.i18n();
         app.view();
         app.errorHandlers();
+        app.static();
         app.routes();
+        app.mail();
 
         return app;
     }
@@ -185,6 +190,30 @@ export class WemorizeApplication {
             });
         });
     }
+
+    private static() {
+        this.server.register(fastifyStatic, {
+            root: path.join(__dirname, "../../client/target"),
+            prefix: "/",
+            wildcard: false,
+            index: false,
+            list: false
+        });
+    }
+
+    private mail() {
+        const smtp = createTransport({
+            ...this.config.smtp
+        });
+        this.server.decorateReply("sendMail", async (templateFile: string, vars: object, recipient: string, subject: string) => {
+            await smtp.sendMail({
+                from: this.config.smtp?.sender,
+                to: recipient,
+                subject: subject,
+                text: await this.server.view(templateFile, vars)
+            });
+        });
+    }    
 
     private routes() {
         new RegisterController().register(this.server);
