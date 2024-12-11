@@ -2,6 +2,7 @@ import { FastifyRequest } from "fastify";
 import { Controller, HandlerFunction } from "./controller";
 import { ControllerConfiguration, ControllerConfigurationDecorator } from "./decorators";
 import { parse, serialize } from "cookie";
+import { DataNotFoundError } from "../storage/repository";
 
 export abstract class Page extends Controller {
 
@@ -28,12 +29,23 @@ export abstract class Page extends Controller {
                 }));
             }
 
+            let vars;
+            try {
+                vars = await this.getVariables(req);
+            } catch(err: unknown) {
+                if(err instanceof DataNotFoundError) {
+                    return resp.status(404).send();
+                }
+
+                throw err;
+            }
+
             return resp.viewAsync(this.viewTemplate, {
                 reqToken: req.session?.request_token ?? "",
                 user: req.session?.user,
                 avatarImg: req.session?.user?.avatar_id ? "avatar/" + req.session.user.avatar_id : "img/default_avatar.svg",
                 message: msg,
-                ...await this.getVariables(req)
+                ...vars
             });
         };
     }

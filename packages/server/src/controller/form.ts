@@ -1,6 +1,6 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyRequest } from "fastify";
 import { Controller } from "./controller";
-import { SimplePage } from "./page";
+import { Page } from "./page";
 import { ControllerConfiguration, ControllerConfigurationDecorator, JsonSchema, ValidateDecorator } from "./decorators";
 
 export abstract class Form extends Controller {
@@ -14,9 +14,20 @@ export abstract class Form extends Controller {
         this.viewTemplate = viewTemplate;
     }
 
+    protected getVariables(req: FastifyRequest): Promise<object> {
+        return Promise.resolve({});
+    }
+
     public register(server: FastifyInstance): void {
         super.register(server);
-        new SimplePage(this.url, this.viewTemplate, this.decorators).register(server);
+        const form = this;
+        new class extends Page {
+
+            protected getVariables(req: FastifyRequest): Promise<object> {
+                return form.getVariables(req);
+            }
+
+        }(this.url, this.viewTemplate, this.decorators).register(server);
     }
     
 }
