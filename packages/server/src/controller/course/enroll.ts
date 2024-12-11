@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { Controller, HandlerFunction } from "../controller";
-import { AuthenticationDecorator, ControllerConfiguration, ValidateDecorator } from "../decorators";
+import { AuthenticationDecorator, CheckTokenDecorator, ControllerConfiguration, ValidateDecorator } from "../decorators";
 
 interface EnrollRequest {
     courseLangId: number;
@@ -9,25 +9,27 @@ interface EnrollRequest {
 export class EnrollController extends Controller {
 
     public constructor() {
-        super("post", "/courses/enroll/:courseId", new AuthenticationDecorator(new ValidateDecorator(new ControllerConfiguration(), {
+        super("post", "/courses/enroll/:courseLangId", new AuthenticationDecorator(new CheckTokenDecorator(new ValidateDecorator(new ControllerConfiguration(), {
             type: "object",
             required: ["courseLangId"],
             properties: {
                 "courseLangId": {
-                    type: "number",
-                    min: 1
+                    type: "integer",
+                    minimum: 1,
+                    exclusiveMaximum: Math.pow(2, 64)
                 }
             }
-        }, "params")));
+        }, "params"))));
     }
 
     protected getHandler(): HandlerFunction {
         return async (req: FastifyRequest, resp: FastifyReply) => {
             const {courseLangId} = req.params as EnrollRequest;
-            if(courseLangId) {
+            if(courseLangId && req.session?.user) {
                 const courseLang = await req.server.db.getCourseLanguageRepository().getById(courseLangId);
                 await req.server.db.getCourseEnrollmentRepository().create({
                     id: 1,
+                    user: req.session.user,
                     course_language: courseLang,
                     daily_goal: 10,
                     enrolled: new Date(),
@@ -39,7 +41,7 @@ export class EnrollController extends Controller {
                 }));
             }
 
-            return resp.status(400);
+            return resp.status(404);
         };
     }
     

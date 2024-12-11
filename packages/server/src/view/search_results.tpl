@@ -8,8 +8,8 @@
     <nav>
         <a href="#" class="button button-primary"
             hx-trigger="click"
-            hx-post="/enroll/{{this.id}}"
-            hx-vals="{'request_token': '{{../reqToken}}' }">{{i18n "course.enroll"}}</a>
+            hx-post="/courses/enroll/{{this.id}}"
+            hx-vals='{"request-token": "{{../reqToken}}"}'>{{i18n "course.enroll"}}</a>
     </nav>
 </article>
 {{/each}}
