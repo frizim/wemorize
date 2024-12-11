@@ -42,16 +42,19 @@ CREATE TABLE cards (
     question_content jsonb NOT NULL,
     answer_content jsonb NOT NULL,
     module smallint NOT NULL DEFAULT 1,
-    index integer NOT NULL,
+    next_id integer DEFAULT NULL,
     value smallint NOT NULL DEFAULT 0,
     
     CONSTRAINT card_id_pk PRIMARY KEY (id),
-    CONSTRAINT card_index_uq UNIQUE (module, index),
     CONSTRAINT card_course_lang_id_fk FOREIGN KEY (course_lang_id)
         REFERENCES course_languages (id) MATCH SIMPLE
         ON UPDATE CASCADE
         ON DELETE CASCADE,
-    CONSTRAINT card_idx_chk CHECK (index > -1),
+    CONSTRAINT next_id_fk FOREIGN KEY (next_id)
+        REFERENCES cards (id) MATCH SIMPLE
+        ON UPDATE RESTRICT
+        ON DELETE RESTRICT,
+    CONSTRAINT next_id_uq UNIQUE NULLS NOT DISTINCT(module,next_id) DEFERRABLE INITIALLY DEFERRED,
     CONSTRAINT card_module_chk CHECK (module > 0),
     CONSTRAINT card_value_chk CHECK (value > -1)
 );
