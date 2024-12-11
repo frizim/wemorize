@@ -51,6 +51,7 @@ export class WemorizeApplication {
         });
 
         const server = await fastify({
+            requestTimeout: 10000,
             logger: {
                 level: "debug"
             }
@@ -66,8 +67,7 @@ export class WemorizeApplication {
             }
         });
 
-        const db = new PgStorageProvider();
-        db.init(cfg);
+        const db = new PgStorageProvider(cfg, server.log);
         await db.migrate(server.log);
         server.decorate('db', db);
 
@@ -147,7 +147,7 @@ export class WemorizeApplication {
         });
 
         Handlebars.registerHelper("reqTokenField", (token: string) => {
-            return new Handlebars.SafeString('<input type="hidden" name="request_token" value="' + Handlebars.Utils.escapeExpression(token) + '">');
+            return new Handlebars.SafeString('<input type="hidden" name="request-token" value="' + Handlebars.Utils.escapeExpression(token) + '">');
         });
 
         this.server.decorateReply("showMessage", function(route: string, messageId: string) {
@@ -198,7 +198,7 @@ export class WemorizeApplication {
                     errTemplate = "badRequest";
                     status = 400;
                 }
-                else {
+                else if(!req.headers["hx-request"]) {
                     const route = req.routeOptions.url ?? "/";
                     resp.showMessage(route, "errors.badRequest.description");
                     return resp.redirect(route);
@@ -212,10 +212,16 @@ export class WemorizeApplication {
                 this.server.log.error(err);
             }
     
-            return resp.status(status).viewAsync("error.tpl", {
-                errTitle: `errors.${errTemplate}.title`,
-                errDescription: `errors.${errTemplate}.description`
-            });
+            if(req.headers["hx-request"]) {
+                return resp.status(status).send(i18next.t(`errors.${errTemplate}.description`));
+            }
+            else {
+                return resp.status(status).viewAsync("error.tpl", {
+                    errTitle: `errors.${errTemplate}.title`,
+                    errDescription: `errors.${errTemplate}.description`
+                });
+            }
+
         });
     }
 
