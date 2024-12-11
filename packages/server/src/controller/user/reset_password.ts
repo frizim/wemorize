@@ -7,8 +7,7 @@ import { State } from "../../model/user";
 
 interface ResetPasswordForm {
     password: string,
-    confirm_password: string,
-    request_token: string
+    confirm_password: string
 };
 
 export class ResetPasswordController extends AuthTokenController {
