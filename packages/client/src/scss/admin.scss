@@ -1,0 +1,82 @@
+@use "editor.scss";
+
+#card-editor {
+    width: 100%;
+    max-width: 1200px;
+}
+
+.module {
+    margin-bottom: 0.5em;
+}
+
+.module table {
+    margin: 0 auto;
+    width: 95%;
+    word-wrap: break-word;
+    table-layout: fixed;
+
+    tr td.card-value, tr th:nth-last-child(2) {
+        width: 6rem;
+    }
+
+    tr td:last-child, tr th:last-child {
+        width: 2rem;
+        max-width: 2rem;
+    }
+}
+
+.module table tbody {
+    width: 100%;
+}
+
+.module table tr {
+    height: 100%;
+}
+
+.module table tr.dragging {
+    opacity: 0.5;
+    user-select: none;
+}
+
+.module table td {
+    height: inherit;
+}
+
+.module table td article {
+    height: 90%;
+    width: inherit;
+}
+
+.module td.card-value {
+    width: 5em;
+}
+
+.module td:last-of-type {
+    width: 1em;
+}
+
+#save-card:not(.active), #add-card:not(.active ) {
+    display: none;
+}
+
+details.module summary {
+    user-select: none;
+}
+
+details.module summary article i {
+    transition: transform var(--speed3);
+}
+
+details.module[open] summary article i {
+    transform: rotate(90deg);
+}
+
+button.extend {
+    margin: 0;
+    transition: transform var(--speed3), border-radius var(--speed3), padding var(--speed3);
+}
+
+.new-module {
+    display: none;
+    visibility: hidden;
+}

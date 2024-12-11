@@ -76,11 +76,12 @@ class SimilarAlternativesAnswer extends CardAnswer {
 }
 
 interface Card {
+    id: number,
     course_language: CourseLanguage,
     question: CardQuestion,
     answer: CardAnswer,
     module: number,
-    index: number,
+    next_id: number|null,
     value: number
 }
 

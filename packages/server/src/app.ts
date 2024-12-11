@@ -27,6 +27,8 @@ import fastifyMultipart from "@fastify/multipart";
 import { DeleteController } from "./controller/user/delete";
 import { AvatarController } from "./controller/user/avatar";
 import { ProfilePage } from "./controller/user/profile";
+import { CreateCardController, DeleteCardController, EditCardsController } from "./controller/admin/edit_cards";
+import { UploadImageController } from "./controller/admin/upload_image";
 
 export class WemorizeApplication {
 
@@ -257,6 +259,15 @@ export class WemorizeApplication {
             list: false,
             decorateReply: false
         });
+
+        this.server.register(fastifyStatic, {
+            root: path.join(this.config.dataDir, "card-img"),
+            prefix: "/card-img",
+            wildcard: true,
+            index: false,
+            list: false,
+            decorateReply: false
+        });
     }
 
     private mail() {
@@ -289,6 +300,11 @@ export class WemorizeApplication {
         new Dashboard().register(this.server);
         new SearchCoursesController().register(this.server);
         new EnrollController().register(this.server);
+
+        new CreateCardController().register(this.server);
+        new EditCardsController().register(this.server);
+        new DeleteCardController().register(this.server);
+        new UploadImageController().register(this.server);
     }
 
     private session() {

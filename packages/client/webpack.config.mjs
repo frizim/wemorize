@@ -3,10 +3,13 @@ import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import CssMinimizerPlugin from "css-minimizer-webpack-plugin";
 
 const config = {
-    entry: './src/index.ts',
+    entry: {
+        base: "./src/index.ts",
+        cards: "./src/cards.ts"
+    },
     mode: "production",
     output: {
-        filename: 'js/base.js',
+        filename: 'js/[name].js',
         clean: true,
         path: path.resolve("./target")
     },
@@ -17,7 +20,7 @@ const config = {
                 use: "ts-loader"
             },
             {
-                test: /\.(woff2|ttf|eot)$/i,
+                test: /\.(woff|woff2|ttf|eot)$/i,
                 type: "asset",
                 generator: {
                     filename: "fonts/[name][ext]"
@@ -49,9 +52,17 @@ const config = {
                     }
                 ],
                 include: [
-                    path.resolve("./src/scss/base.scss")
+                    path.resolve("./src/scss/base.scss"),
+                    path.resolve("./src/scss/admin.scss")
                 ],
                 sideEffects: true
+            },
+            {
+                test: /\.css$/i,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    "css-loader"
+                ]
             },
             {
                 test: /\.(svg|png|jpg)$/,
@@ -72,11 +83,11 @@ const config = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            filename: "css/base.css"
+            filename: "css/[name].css"
         })
     ],
     performance: {
-        maxAssetSize: 1000000
+        maxAssetSize: 2000000
     }
 };
 

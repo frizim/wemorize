@@ -5,7 +5,8 @@
         "dashboard": "Dashboard",
         "register": "Registrieren",
         "forgotPassword": "Passwort zurücksetzen",
-        "settings": "Einstellungen"
+        "settings": "Einstellungen",
+        "editCards": "Karteneditor"
     },
     "fields": {
         "username": "Benutzername",
@@ -61,6 +62,11 @@
         "search": {
             "noResults": "Keine Kurse gefunden"
         }
+    },
+    "cards": {
+        "question": "Frage",
+        "answer": "Antwort",
+        "value": "Punkte"
     },
     "course": {
         "madeBy": "von {{creator}}",
@@ -145,5 +151,9 @@
     "aria": {
         "headerMenu": "Hauptmenü",
         "footerMenu": "Weitere Links"
+    },
+    "module": {
+        "add": "Neues Modul",
+        "title": "Modul {{number}}"
     }
 }
