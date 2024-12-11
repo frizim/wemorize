@@ -8,7 +8,7 @@ type AdditionalConfig = Record<string, unknown>;
 type PresetRouteOptions = Omit<RouteOptions, "handler">;
 
 interface SecureRequest {
-    request_token: string;
+    "request-token": string;
 }
 
 export interface JsonSchema {
@@ -49,22 +49,27 @@ export abstract class ControllerConfigurationDecorator extends ControllerConfigu
 export class CheckTokenDecorator extends ControllerConfigurationDecorator {
 
     protected decorate(config: PresetRouteOptions): PresetRouteOptions {
-        config.schema = {
-            body: {
-                "type": "object",
-                "required": ["request_token"],
-                "properties": {
-                    "request_token": {
-                        "type": "string",
-                        "minLength": 32,
-                        "maxLength": 32
-                    }
+
+        const useBody = config.method == "post" || config.method == "put";
+
+        if(!config.schema) {
+            config.schema = {};
+        }
+
+        config.schema[useBody ? "body" : "headers"] = {
+            "type": "object",
+            "required": ["request-token"],
+            "properties": {
+                "request-token": {
+                    "type": "string",
+                    "minLength": 32,
+                    "maxLength": 32
                 }
             }
         };
 
         config.preHandler = async (req: FastifyRequest, resp: FastifyReply) => {
-            const token = (req.body as SecureRequest).request_token;
+            const token = (useBody ? req.body as SecureRequest : req.headers)["request-token"] as string;
             if(req.session?.request_token && timingSafeEqual(Buffer.from(token), Buffer.from(req.session.request_token))) {
                 return;
             }
@@ -122,10 +127,10 @@ export class AuthenticationDecorator extends ControllerConfigurationDecorator {
                 }
 
                 req.log.warn("Unauthorized access to route %s by user %o", req.url, req.session.user);
-                resp.status(401);
+                return resp.status(401).send();
             }
             else {
-                resp.redirect("/login");
+                return resp.redirect("/login");
             }
         };
 
@@ -199,8 +204,13 @@ export class IpRateLimitDecorator extends RateLimitDecorator<string> {
 
 export class UserRateLimitDecorator extends RateLimitDecorator<number> {
     protected decorate(config: PresetRouteOptions): PresetRouteOptions {
-        config.onRequest = async (req: FastifyRequest, resp: FastifyReply) => {
-            this.checkRateLimit(req.session!.user!.id, req, resp);
+        config.preHandler = async (req: FastifyRequest, resp: FastifyReply) => {
+            if(req.session?.user) {
+                this.checkRateLimit(req.session.user.id, req, resp);
+            }
+            else {
+                return resp.status(401).send();
+            }
         };
         return config;
     }
