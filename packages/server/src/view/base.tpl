@@ -4,10 +4,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="referrer" content="no-referrer">
-        <meta http-equiv="content-security-policy" content="default-src: 'none'; script-src: 'self'; style-src: 'self'; img-src: 'self'; font-src: 'self'; form-action: 'self'; connect-src: 'self'; frame-ancestors: 'none'; upgrade-insecure-requests">
+        <meta http-equiv="content-security-policy" content="default-src 'none'; script-src 'self'; style-src 'self'{{#if inlineCss}} 'unsafe-inline'{{/if}}; img-src 'self'; media-src 'self' data:; font-src 'self'; form-action 'self'; connect-src 'self'; upgrade-insecure-requests">
         <meta name="color-scheme" content="light dark">
         <meta name="creator" content="Wemorize">
 
+        <meta name="htmx-config" content='{"timeout": 30000, "allowEval": false, "includeIndicatorStyles": false}'>
         <title>{{ title }} - {{instanceName}}</title>
         <link rel="icon" href="{{baseUrl}}/img/favicon.svg">
         <link rel="stylesheet" href="{{baseUrl}}/css/base.css">

@@ -12,14 +12,14 @@
             <span class="row">
                 <h6 class="max">{{this.course_language.name}}</h6>
                 <div class="rank-badge">
-                    <div class="medal"><span>1</span></div> <!-- TODO -->
+                    <div class="medal {{switch this.course_stats.rank 1="gold" 2="silver" 3="bronze" default=""}}"><span>{{this.course_stats.rank}}</span></div>
                     <div class="ribbon ribbon-left"></div>
                     <div class="ribbon ribbon-right"></div>
                 </div>
             </span>
             <span class="row">
-                <progress value="20" max="100"></progress>
-                <span class="course-progress-pct">20 %</span>
+                <progress value="{{this.course_stats.progress}}" max="100"></progress>
+                <span class="course-progress-pct">{{this.course_stats.progress}} %</span>
             </span>
         </article>
         {{/each}}

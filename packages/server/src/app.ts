@@ -150,6 +150,21 @@ export class WemorizeApplication {
             return new Handlebars.SafeString('<input type="hidden" name="request-token" value="' + Handlebars.Utils.escapeExpression(token) + '">');
         });
 
+        Handlebars.registerHelper("concat", (first: string, second: string) => {
+            return first + second;
+        });
+    
+        Handlebars.registerHelper("switch", (value: number|string, args: {hash: Record<number|string, string>}) => {
+            for(const [k, v] of Object.entries(args.hash)) {
+                if(value == k) {
+                    return v;
+                }
+            }
+    
+            return args.hash.default;
+    
+        });
+
         this.server.decorateReply("showMessage", function(route: string, messageId: string) {
             this.header("set-cookie", serialize("msg-" + route, messageId, {
                 httpOnly: true,

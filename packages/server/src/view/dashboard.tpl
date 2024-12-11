@@ -12,7 +12,7 @@
                 <h5>{{i18n "course.madeBy" creator=this.course_language.course.creator.name}}</h5>
             </div>
             <div class="rank-badge">
-                <div class="medal"><span>1</span></div> <!-- TODO -->
+                <div class="medal {{switch this.course_stats.rank 1="gold" 2="silver" 3="bronze" default=""}}"><span>{{this.course_stats.rank}}</span></div>
                 <div class="ribbon ribbon-left"></div>
                 <div class="ribbon ribbon-right"></div>
             </div>
@@ -24,7 +24,7 @@
         <nav>
             <a href="#" class="button transparent">{{i18n "course.startRegular"}}</a>
             <a href="#" class="button transparent">{{i18n "course.startRep"}}</a>
-            <label for="show-settings-{{@index}}"><input type="radio" id="show-settings-{{@index}}" name="toggle-settings-{{@index}}" class="show-settings"><i>settings</i></label>
+            <label class="button circle transparent" for="show-settings-{{@index}}"><input type="radio" id="show-settings-{{@index}}" name="toggle-settings-{{@index}}" class="show-settings"><i>settings</i></label>
         </nav>
     </div>
     <div class="card-back">
@@ -41,8 +41,8 @@
             </form>
         </div>
         <nav>
-            <a href="#" class="button transparent danger-link">{{i18n "course.leave"}}</a>
-            <label for="hide-settings-{{@index}}"><input type="radio" id="hide-settings-{{@index}}" name="toggle-settings-{{@index}}"><i>settings</i></label>
+            <a href="#" class="button transparent error-text">{{i18n "course.leave"}}</a>
+            <label class="button circle transparent" for="hide-settings-{{@index}}"><input type="radio" id="hide-settings-{{@index}}" name="toggle-settings-{{@index}}"><i>close</i></label>
         </nav>
     </div>
     </article>
