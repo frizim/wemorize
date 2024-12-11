@@ -26,6 +26,7 @@ import { SettingsController } from "./controller/user/settings";
 import fastifyMultipart from "@fastify/multipart";
 import { DeleteController } from "./controller/user/delete";
 import { AvatarController } from "./controller/user/avatar";
+import { ProfilePage } from "./controller/user/profile";
 
 export class WemorizeApplication {
 
@@ -262,6 +263,7 @@ export class WemorizeApplication {
         new SettingsController().register(this.server);
         new AvatarController().register(this.server);
         new DeleteController().register(this.server);
+        new ProfilePage().register(this.server);
 
         new Dashboard().register(this.server);
         new SearchCoursesController().register(this.server);

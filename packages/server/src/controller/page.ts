@@ -31,7 +31,7 @@ export abstract class Page extends Controller {
             return resp.viewAsync(this.viewTemplate, {
                 reqToken: req.session?.request_token ?? "",
                 user: req.session?.user,
-                avatarImg: req.session?.user?.avatar_id ? "img/" + req.session.user.avatar_id + ".jpg" : "img/default_avatar.svg",
+                avatarImg: req.session?.user?.avatar_id ? "avatar/" + req.session.user.avatar_id : "img/default_avatar.svg",
                 message: msg,
                 ...await this.getVariables(req)
             });

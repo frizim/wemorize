@@ -125,6 +125,10 @@
             "title": "Nicht gefunden",
             "description": "Diese Ressource existiert nicht. Möglicherweise wurde sie umbenannt, gelöscht oder die URL enthält einen Tippfehler."
         },
+        "profileNotFound": {
+            "title": "Profil nicht gefunden",
+            "description": "Dieses Profil existiert nicht."
+        },
         "badRequest": {
             "title": "Ungültige Eingabe",
             "description": "Die letzte Eingabe war nicht gültig. Bitte versuche es erneut."
