@@ -19,7 +19,7 @@
     "@wemorize/common": "^0.1.0",
     "argon2": "^0.41.1",
     "cookies": "^0.9.1",
-    "fastify": "^5.1.0",
+    "fastify": "^5.3.1",
     "handlebars": "^4.7.8",
     "i18next": "^24.0.5",
     "kysely": "^0.27.5",
