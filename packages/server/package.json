@@ -23,7 +23,7 @@
     "handlebars": "^4.7.8",
     "i18next": "^24.0.5",
     "kysely": "^0.27.5",
-    "nodemailer": "^6.9.16",
+    "nodemailer": "^8.0.4",
     "pg": "^8.13.1",
     "sharp": "^0.33.5"
   },
